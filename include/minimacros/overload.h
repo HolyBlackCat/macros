@@ -1,6 +1,6 @@
 #pragma once
 
-namespace MiniMacros
+namespace minm
 {
     template <typename ...P>
     struct Overload : P...
