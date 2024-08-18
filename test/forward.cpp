@@ -25,3 +25,5 @@ static_assert(std::is_same_v<decltype(M_FWD(z)), A &&>);
 static_assert(std::is_same_v<decltype(M_FWD(x)), A &&>);
 // Forwarding a prvalue does nothing (the move is elided).
 static_assert(std::is_same_v<decltype(M_FWD(B{})), B>);
+// Forwarding a void does nothing. This isn't particularly important, but why not.
+static_assert(std::is_same_v<decltype(M_FWD(void())), void>);
