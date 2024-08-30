@@ -1,7 +1,7 @@
 #pragma once
 
-#include <minimacros/overload.h>
-#include <minimacros/returns.h>
+#include <minimacros/utils/overload.h>
+#include <minimacros/utils/returns.h>
 
 #define M_FUNC(...) \
     [](auto &&... _m_params) M_RETURNS(__VA_ARGS__(decltype(_m_params)(_m_params)...))

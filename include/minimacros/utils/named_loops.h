@@ -1,6 +1,6 @@
 #pragma once
 
-#include <minimacros/common.h>
+#include <minimacros/utils/common.h>
 
 /* Implements named loops, allowing you to break/continue from nested loops.
 Example:
