@@ -1,6 +1,6 @@
 #pragma once
 
-#include <minimacros/utils/common.h>
+#include <minimacros/meta/common.h>
 #include <minimacros/meta/compare_versions.h>
 
 // Compiler detection.

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <minimacros/utils/common.h>
+#include <minimacros/meta/common.h>
 
 // Provides an interface for Clang's attribute `preferred_name`.
 // For example, if you have this:

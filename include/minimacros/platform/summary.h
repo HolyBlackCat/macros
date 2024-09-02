@@ -5,7 +5,7 @@
 #include <minimacros/platform/os.h>
 #include <minimacros/platform/preprocessor.h>
 #include <minimacros/platform/stdlib.h>
-#include <minimacros/utils/common.h>
+#include <minimacros/meta/common.h>
 
 #define M_STRING_PLATFORM_SUMMARY \
     /* OS */\

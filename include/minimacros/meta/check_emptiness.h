@@ -1,7 +1,7 @@
 #pragma once
 
 #include <minimacros/platform/preprocessor.h>
-#include <minimacros/utils/common.h>
+#include <minimacros/meta/common.h>
 
 // M_EXPECT_EMPTY(...)      - triggers compilation error if `...` is not empty
 // M_EXPECT_NONEMPTY(...)   - triggers compilation error if `...` is empty, expands to nothing
