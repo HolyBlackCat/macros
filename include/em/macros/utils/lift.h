@@ -2,7 +2,7 @@
 
 #include <em/macros/portable/artificial.h>
 #include <em/macros/portable/force_inline.h>
-#include <em/macros/utils/overload.h>
+#include <em/macros/detail/overload.h>
 #include <em/macros/utils/returns.h>
 
 // Those macros "lift" potentially overloaded functions (and other things),
@@ -19,7 +19,7 @@
 // Lift a member function or variable (see `EM_MEMBER_FUNC`, `EM_MEMBER_VAR`).
 // `EM_MEMBER(.foo)` or `EM_MEMBER(->foo)`.
 #define EM_MEMBER(...) \
-    ::minm::Overload{EM_MEMBER_FUNC(__VA_ARGS__), EM_MEMBER_VAR(__VA_ARGS__)}
+    em::detail::Macros::Overload{EM_MEMBER_FUNC(__VA_ARGS__), EM_MEMBER_VAR(__VA_ARGS__)}
 
 // Lift a member function: `EM_MEMBER_FUNC(.foo)` -> `x.foo(...)`, or `EM_MEMBER_FUNC(->foo)` -> `x->foo(...)`.
 #define EM_MEMBER_FUNC(...) \

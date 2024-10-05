@@ -1,6 +1,6 @@
 #pragma once
 
-namespace minm
+namespace em::detail::Macros
 {
     template <typename ...P>
     struct Overload : P...

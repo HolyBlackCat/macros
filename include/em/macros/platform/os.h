@@ -62,11 +62,11 @@
 #  define EM_IS_SMARTPHONE 1
 #elif EM_OVERRIDING_OS_DETECTION ? EM_IS_MACOS || EM_IS_IPHONE : defined(__APPLE__) // This branch isn't particularly well-tested.
 #  ifdef __is_target_os
-#    define DETAIL_M_TARGET_OS(x) __is_target_os(x)
+#    define DETAIL_EM_TARGET_OS(x) __is_target_os(x)
 #  else
-#    define DETAIL_M_TARGET_OS(x) 0
+#    define DETAIL_EM_TARGET_OS(x) 0
 #  endif
-#  if EM_OVERRIDING_OS_DETECTION ? EM_IS_IPHONE : DETAIL_M_TARGET_OS(ios)
+#  if EM_OVERRIDING_OS_DETECTION ? EM_IS_IPHONE : DETAIL_EM_TARGET_OS(ios)
 #    define EM_STRING_OS "IPhone"
 #    define EM_IS_IPHONE 1
 #    define EM_IS_SMARTPHONE 1
