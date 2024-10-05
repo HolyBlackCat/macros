@@ -1,4 +1,4 @@
-#include <minimacros/forward.h>
+#include <minimacros/utils/forward.h>
 
 #include <type_traits>
 
@@ -15,15 +15,15 @@ A x;
 A &y = x;
 A &&z = A{};
 // Forwarding lvalue references.
-static_assert(std::is_same_v<decltype(M_FWD(y)), A &>);
+static_assert(std::is_same_v<decltype(EM_FWD(y)), A &>);
 // Forwarding rvalue references.
-static_assert(std::is_same_v<decltype(M_FWD(z)), A &&>);
+static_assert(std::is_same_v<decltype(EM_FWD(z)), A &&>);
 
 // Weird usecases:
 
 // Forwarding a non-reference variable moves it (for consistency with `std::forward`).
-static_assert(std::is_same_v<decltype(M_FWD(x)), A &&>);
+static_assert(std::is_same_v<decltype(EM_FWD(x)), A &&>);
 // Forwarding a prvalue does nothing (the move is elided).
-static_assert(std::is_same_v<decltype(M_FWD(B{})), B>);
+static_assert(std::is_same_v<decltype(EM_FWD(B{})), B>);
 // Forwarding a void does nothing. This isn't particularly important, but why not.
-static_assert(std::is_same_v<decltype(M_FWD(void())), void>);
+static_assert(std::is_same_v<decltype(EM_FWD(void())), void>);
