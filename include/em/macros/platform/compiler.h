@@ -1,7 +1,7 @@
 #pragma once
 
-#include <minimacros/meta/common.h>
-#include <minimacros/meta/compare_versions.h>
+#include <em/macros/meta/common.h>
+#include <em/macros/meta/compare_versions.h>
 
 // Compiler detection.
 //

@@ -5,10 +5,10 @@
 
 // #error Add intel compiler? Maybe don't even expose version numbers, just a string "Blah compiler X.Y.Z" (+ ", like" + "Clang x.y.z ...", prepend it if it's set)
 
-#include <minimacros/platform/compiler.h>
-#include <minimacros/platform/preprocessor.h>
-#include <minimacros/platform/stdlib.h>
-#include <minimacros/platform/summary.h>
+#include <em/macros/platform/compiler.h>
+#include <em/macros/platform/preprocessor.h>
+#include <em/macros/platform/stdlib.h>
+#include <em/macros/platform/summary.h>
 
 // Compiler.
 #if defined(__clang__)

@@ -1,4 +1,4 @@
-#include <minimacros/utils/lift.h>
+#include <em/macros/utils/lift.h>
 
 constexpr int sum(int x, int y) noexcept {return x + y;}
 constexpr int sum(int x, int y, int z) {return x + y + z;}

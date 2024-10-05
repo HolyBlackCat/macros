@@ -1,7 +1,7 @@
 #pragma once
 
-#include <minimacros/meta/check_emptiness.h>
-#include <minimacros/platform/preprocessor.h>
+#include <em/macros/meta/check_emptiness.h>
+#include <em/macros/platform/preprocessor.h>
 
 // Version comparison macros. Will usually be used as an implementation detail of other macros.
 //

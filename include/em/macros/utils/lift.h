@@ -1,9 +1,9 @@
 #pragma once
 
-#include <minimacros/portable/artificial.h>
-#include <minimacros/portable/force_inline.h>
-#include <minimacros/utils/overload.h>
-#include <minimacros/utils/returns.h>
+#include <em/macros/portable/artificial.h>
+#include <em/macros/portable/force_inline.h>
+#include <em/macros/utils/overload.h>
+#include <em/macros/utils/returns.h>
 
 // Those macros "lift" potentially overloaded functions (and other things),
 // converting them to lambdas that can be easily passed around.
