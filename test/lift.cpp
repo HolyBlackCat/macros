@@ -1,4 +1,4 @@
-#include <minimacros/utils/wrap_func.h>
+#include <minimacros/utils/lift.h>
 
 constexpr int sum(int x, int y) noexcept {return x + y;}
 constexpr int sum(int x, int y, int z) {return x + y + z;}
@@ -61,3 +61,10 @@ static constexpr auto v2 = EM_MEMBER_VAR(.x);
 static constexpr auto vp2 = EM_MEMBER_VAR(->x);
 static_assert(v2(a) == 10);
 static_assert(vp2(ap) == 10);
+
+// Operators:
+
+static constexpr auto op1 = EM_UNARY(-);
+static constexpr auto op2 = EM_BINARY(/);
+static_assert(op1(42) == -42);
+static_assert(op2(30, 10) == 3);
