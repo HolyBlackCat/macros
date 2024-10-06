@@ -1,7 +1,7 @@
 #pragma once
 
 #include <em/macros/portable/artificial.h>
-#include <em/macros/portable/force_inline.h>
+#include <em/macros/portable/always_inline.h>
 #include <em/macros/detail/overload.h>
 #include <em/macros/utils/returns.h>
 
@@ -9,7 +9,7 @@
 // converting them to lambdas that can be easily passed around.
 
 #ifndef DETAIL_EM_LIFT_LAMBDA_ATTRS
-#define DETAIL_EM_LIFT_LAMBDA_ATTRS EM_FORCE_INLINE_LAMBDA EM_ARTIFICIAL
+#define DETAIL_EM_LIFT_LAMBDA_ATTRS EM_ALWAYS_INLINE_LAMBDA EM_ARTIFICIAL
 #endif
 
 // Lift a function. `EM_FUNC(foo)` -> `foo(...)`.
