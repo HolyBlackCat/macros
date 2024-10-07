@@ -11,4 +11,5 @@
 // Given `, ...`, removes the leading `,`.
 // If the argument is empty, returns nothing.
 // Otherwise, if the argument doesn't start with a `,`, fails.
-#define EM_REMOVE_LEADING_COMMA(x, ...) EM_EXPECT_EMPTY(x) __VA_ARGS__
+#define EM_REMOVE_LEADING_COMMA(...) DETAIL_EM_REMOVE_LEADING_COMMA(__VA_ARGS__)
+#define DETAIL_EM_REMOVE_LEADING_COMMA(x, ...) EM_EXPECT_EMPTY(x) __VA_ARGS__
