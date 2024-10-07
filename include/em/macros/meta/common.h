@@ -1,5 +1,8 @@
 #pragma once
 
+// Returns nothing.
+#define EM_EMPTY(...)
+
 // Returns `...` unchanged. Throwing a few equivalent overloads to help with recursive macros.
 #define EM_IDENTITY(...) __VA_ARGS__
 #define EM_IDENTITY_A(...) __VA_ARGS__
@@ -23,3 +26,8 @@
 // Appends `_end` to the end of `...`. This helps writing a certain kind of preprocessor loops.
 #define EM_END(...) DETAIL_EM_END(__VA_ARGS__)
 #define DETAIL_EM_END(...) __VA_ARGS__##_end
+
+// Some constants.
+#define EM_COMMA(...) ,
+#define EM_SYMBOL_AND(...) &&
+#define EM_SYMBOL_OR(...) ||
