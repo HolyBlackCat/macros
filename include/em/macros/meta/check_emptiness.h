@@ -1,7 +1,7 @@
 #pragma once
 
-#include <em/macros/platform/preprocessor.h>
-#include <em/macros/meta/common.h>
+#include "em/macros/platform/preprocessor.h"
+#include "em/macros/meta/common.h"
 
 // EM_EXPECT_EMPTY(...)      - triggers compilation error if `...` is not empty
 // EM_EXPECT_NONEMPTY(...)   - triggers compilation error if `...` is empty, expands to nothing

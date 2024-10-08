@@ -1,11 +1,11 @@
 #pragma once
 
-#include <em/macros/platform/compiler.h>
-#include <em/macros/platform/language_version.h>
-#include <em/macros/platform/os.h>
-#include <em/macros/platform/preprocessor.h>
-#include <em/macros/platform/stdlib.h>
-#include <em/macros/meta/common.h>
+#include "em/macros/platform/compiler.h"
+#include "em/macros/platform/language_version.h"
+#include "em/macros/platform/os.h"
+#include "em/macros/platform/preprocessor.h"
+#include "em/macros/platform/stdlib.h"
+#include "em/macros/meta/common.h"
 
 #define EM_STRING_PLATFORM_SUMMARY \
     /* OS */\

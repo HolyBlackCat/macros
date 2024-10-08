@@ -1,4 +1,4 @@
-#include <em/macros/portable/canonical_typedefs.h>
+#include "em/macros/portable/canonical_typedefs.h"
 
 EM_CANONICAL_TYPEDEFS( (template <typename T, typename U> struct), my_basic_string,
     (my_string, my_basic_string<char, char>)
