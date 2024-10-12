@@ -29,5 +29,7 @@
 
 // Some constants.
 #define EM_COMMA(...) ,
+#define EM_LPAREN(...) (
+#define EM_RPAREN(...) )
 #define EM_SYMBOL_AND(...) &&
 #define EM_SYMBOL_OR(...) ||
