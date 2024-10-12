@@ -1,10 +1,8 @@
 #pragma once
 
-#include "em/macros/meta/common.h"
-
 // Those macros generate cv and/or ref-qualified versions of functions.
 //
-// E.g. `EM_MAYBE_CONST( EM_CVREF int &GetX() EM_CVREF {...} )` expands to:
+// E.g. `EM_MAYBE_CONST( EM_QUAL int &GetX() EM_QUAL {...} )` expands to:
 //           int &GetX()       {...}
 //     const int &GetX() const {...}
 //
@@ -16,32 +14,43 @@
 // You can have as many functions inside the argument as you want.
 //
 // Following macros can appear in the argument, any amount of times:
-// * `EM_CVREF` is replaced with a different qualifier in each copy, as explained above.
+// * `EM_QUAL` is replaced with a different qualifier in each copy, as explained above.
 // * `EM_FWD_SELF` is replaced with `(*this)` or `std::move(*this)` in `&&`-qualified functions.
 //
-// If any of those two macros are inside of parentheses, those parentheses must be preceeded by `EM_CVREF_PARENS`.
-// E.g. `EM_MAYBE_CONST( EM_CVREF int &Foo EM_CVREF_PARENS(EM_CVREF int &x); )` expands to:
+// If any of those two macros are inside of parentheses, those parentheses must be preceeded by `EM_QUAL_P`.
+// E.g. `EM_MAYBE_CONST( EM_QUAL int &Foo EM_QUAL_P(EM_QUAL int &x); )` expands to:
 //           int &Foo(      int &x);
 //     const int &Foo(const int &x);
 
 #define EM_MAYBE_CONST(...) \
-    DETAIL_EM_CV_NONE ((EM_EMPTY,__VA_ARGS__)()) \
-    DETAIL_EM_CV_CONST((EM_EMPTY,__VA_ARGS__)())
+    /* Using 'identity()' to expands macros when `EM_QUAL_P` precede their arguments. */\
+    DETAIL_EM_CV_IDENTITY( \
+        DETAIL_EM_CV_NONE ((DETAIL_EM_CV_EMPTY,__VA_ARGS__)()) \
+        DETAIL_EM_CV_CONST((DETAIL_EM_CV_EMPTY,__VA_ARGS__)()) \
+    )
 #define EM_CONST_LVALUE_AND_RVALUE(...) \
-    DETAIL_EM_CV_CONST_LREF((EM_EMPTY,__VA_ARGS__)()) \
-    DETAIL_EM_CV_RREF      ((EM_EMPTY,__VA_ARGS__)())
+    DETAIL_EM_CV_IDENTITY( \
+        DETAIL_EM_CV_CONST_LREF((DETAIL_EM_CV_EMPTY,__VA_ARGS__)()) \
+        DETAIL_EM_CV_RREF      ((DETAIL_EM_CV_EMPTY,__VA_ARGS__)()) \
+    )
 #define EM_MAYBE_CONST_LR(...) \
-    DETAIL_EM_CV_LREF      ((EM_EMPTY,__VA_ARGS__)()) \
-    DETAIL_EM_CV_CONST_LREF((EM_EMPTY,__VA_ARGS__)()) \
-    DETAIL_EM_CV_RREF      ((EM_EMPTY,__VA_ARGS__)()) \
-    DETAIL_EM_CV_CONST_RREF((EM_EMPTY,__VA_ARGS__)())
+    DETAIL_EM_CV_IDENTITY( \
+        DETAIL_EM_CV_LREF      ((DETAIL_EM_CV_EMPTY,__VA_ARGS__)()) \
+        DETAIL_EM_CV_CONST_LREF((DETAIL_EM_CV_EMPTY,__VA_ARGS__)()) \
+        DETAIL_EM_CV_RREF      ((DETAIL_EM_CV_EMPTY,__VA_ARGS__)()) \
+        DETAIL_EM_CV_CONST_RREF((DETAIL_EM_CV_EMPTY,__VA_ARGS__)()) \
+    )
 
-#define EM_CVREF )(DETAIL_EM_CV_QUAL,
+#define EM_QUAL )(DETAIL_EM_CV_QUAL,
 #define EM_FWD_SELF )(DETAIL_EM_FWD_SELF,
-#define EM_CVREF_PARENS(...) )(EM_LPAREN,)(EM_EMPTY,__VA_ARGS__)(EM_RPAREN,)(EM_EMPTY,
+#define EM_QUAL_P(...) )(DETAIL_EM_CV_LPAREN,)(DETAIL_EM_CV_EMPTY,__VA_ARGS__)(DETAIL_EM_CV_RPAREN,)(DETAIL_EM_CV_EMPTY,
 
+#define DETAIL_EM_CV_IDENTITY(...) __VA_ARGS__
+#define DETAIL_EM_CV_EMPTY(a, b)
 #define DETAIL_EM_CV_QUAL(a, b) a
 #define DETAIL_EM_FWD_SELF(a, b) b
+#define DETAIL_EM_CV_LPAREN(a, b) (
+#define DETAIL_EM_CV_RPAREN(a, b) )
 
 #define DETAIL_EM_CV_BODY(cv, self, m, ...) m(cv, self) __VA_ARGS__
 
