@@ -1,5 +1,6 @@
 #pragma once
 
+#include "em/macros/detail/enable_short_macros.h"
 #include "em/macros/detail/overload.h"
 #include "em/macros/portable/always_inline.h"
 #include "em/macros/portable/artificial.h"
@@ -35,7 +36,7 @@
 // Lift binary operator: `EM_BINARY(/)`.
 #define EM_BINARY(...) [](auto &&_m_a, auto &&_m_b) DETAIL_EM_LIFT_LAMBDA_ATTRS EM_RETURNS(EM_FWD(_m_a) __VA_ARGS__ EM_FWD(_m_b))
 
-#if EM_SHORT_MACROS || EM_SHORT_MACROS_LIFT
+#if EM_ENABLE_SHORT_MACROS(LIFT)
 #define FUNC EM_FUNC
 #define MEMBER EM_MEMBER
 #define MEMBER_FUNC EM_MEMBER_FUNC

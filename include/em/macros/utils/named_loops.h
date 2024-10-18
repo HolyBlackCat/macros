@@ -1,5 +1,6 @@
 #pragma once
 
+#include "em/macros/detail/enable_short_macros.h"
 #include "em/macros/meta/common.h"
 
 /* Implements named loops, allowing you to break/continue from nested loops.
@@ -30,13 +31,13 @@ Define `EM_KEYWORD_MACROS` to allow `break(my_loop);` and `continue(my_loop);` i
 #define EM_BREAK(name) goto EM_CAT(_namedloop_break_,name)
 #define EM_CONTINUE(name) goto EM_CAT(_namedloop_continue_,name)
 
-#if EM_SHORT_MACROS || EM_SHORT_MACROS_NAMED_LOOPS
+#if EM_ENABLE_SHORT_MACROS(NAMED_LOOPS)
 #define LOOP_NAME EM_LOOP_NAME
 #define BREAK EM_BREAK
 #define CONTINUE EM_CONTINUE
 #endif
 
-#if EM_KEYWORD_MACROS || EM_KEYWORD_MACROS_NAMED_LOOPS
+#if EM_ENABLE_KEYWORD_MACROS(NAMED_LOOPS)
 
 #ifdef __clang__
 #pragma clang diagnostic push

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "em/macros/detail/enable_short_macros.h"
+
 #include <type_traits>
 
 namespace em::detail::Macros
@@ -18,7 +20,7 @@ namespace em::detail::Macros
 // This isn't a part of the default macro because it decltypes the argument twice, which seems lowkey too expensive.
 #define EM_FWD_EX(...) static_cast<typename ::em::detail::Macros::FwdTypeEx<decltype(__VA_ARGS__),decltype((__VA_ARGS__))>::type>(__VA_ARGS__)
 
-#if EM_SHORT_MACROS || EM_SHORT_MACROS_FORWARD
+#if EM_ENABLE_SHORT_MACROS(FWD)
 #define FWD EM_FWD
 #define FWD_EX EM_FWD_EX
 #endif
