@@ -48,7 +48,7 @@ Examples:
             (__VA_ARGS__) \
         )
 
-    #define CVREF EM_1
+    #define QUAL EM_1
     #define FWD_SELF EM_2
 
     struct A
@@ -56,7 +56,7 @@ Examples:
         int x;
 
         MAYBE_CONST_LR(
-            int CVREF foo() CVREF {return FWD_SELF.x;}
+            int QUAL foo() QUAL {return FWD_SELF.x;}
         )
 
         // Expands to:

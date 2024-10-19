@@ -3,9 +3,7 @@
 #include "em/macros/meta/classify_list.h"
 #include "em/macros/meta/common.h"
 
-
 // Macros get elements from lists by index.
-
 
 // Given `(a)...`, returns `a`.
 // If you want to return 2th+ element, use
