@@ -10,6 +10,7 @@
   but the latter allows commas in the element.
 Placeholders in the `...` are are `EM_i` (or `_i_` is `SHORT_MACROS[_CODEGEN]` are enabled), which expands to `seq_[??][i]`.
 If a placeholder appears inside of `(...)`, the parentheses must be preceded by `EM_P` (shortens to `_P_`).
+There are also optional placeholders `EM_i_OPT` (shorten to `_i_OPT_) that expand to nothing if not provided, instead of causing an error.
 `sep_` is a separator that's inserted between expansion. It can be parenthesized, the parentheses are stripepd (e.g. `(,)` to insert a comma).
 
 Examples:
@@ -65,6 +66,23 @@ Examples:
         // int &&foo() && {return std::move(*this).x;}
         // int const &&foo() const && {return std ::move(*this).x;}
     };
+
+ 5. // A enum with a string conversion and optional values.
+    #define MAKE_ENUM(E, elems) \
+        enum class E { \
+            EM_CODEGEN(elems,, EM_1 MAYBE_INIT EM_P(EM_2_OPT),) \    // Could also use `EM_1 EM_2_OPT` directly, changing the syntax to `(a,=42)`.
+        }; \
+        std::string ToString(E e) \
+        { \
+            switch (e) { EM_CODEGEN(elems,, case E::EM_1: return EM_STR EM_P(EM_1);) } \
+        }
+    #define MAYBE_INIT(...) __VA_OPT__(= __VA_ARGS__)
+
+    MAKE_ENUM( E,
+        (a,10)
+        (b)
+        (c,20)
+    )
 */
 #define EM_CODEGEN(seq_, sep_, .../*pattern*/) EM_CODEGEN_LOW(, seq_, sep_, (__VA_ARGS__))
 // A lower-level version.
