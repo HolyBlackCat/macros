@@ -9,10 +9,10 @@
 
 // --- Those fail if the index is out of range:
 
-// Given `(a)...`, returns `a`.
-#define EM_SEQ_AT0(...) DETAIL_EM_SEQ_AT0 __VA_ARGS__ ) // Reimplementing `EM_SEQ_FIRST` because `EM_CODEGEN` starts choking if we instead call it here.
+// Returns ith element in a `(a)(b)(c)` sequence. There can be junk at the end of the sequence, it's ignored.
+#define EM_SEQ_AT(i, ...) EM_CAT(EM_SEQ_AT,i)(__VA_ARGS__)
+#define EM_SEQ_AT0(...) DETAIL_EM_SEQ_AT0 __VA_ARGS__ ) // Reimplementing `EM_SEQ_FIRST` because `EM_CODEGEN` starts choking if we instead call that here.
 #define DETAIL_EM_SEQ_AT0(...) __VA_ARGS__ EM_EMPTY(
-// Given `(a)(b)...`, returns `b`, and so on.
 #define EM_SEQ_AT1(...) EM_SEQ_AT0(EM_EMPTY __VA_ARGS__)
 #define EM_SEQ_AT2(...) EM_SEQ_AT1(EM_EMPTY __VA_ARGS__)
 #define EM_SEQ_AT3(...) EM_SEQ_AT2(EM_EMPTY __VA_ARGS__)
@@ -21,10 +21,9 @@
 #define EM_SEQ_AT6(...) EM_SEQ_AT5(EM_EMPTY __VA_ARGS__)
 #define EM_SEQ_AT7(...) EM_SEQ_AT6(EM_EMPTY __VA_ARGS__)
 
-
-// Given `a, ...` (or just `a`) returns `a`.
+// Returns ith element in a `a, b, c` sequence.
+#define EM_VA_AT(i, ...) EM_CAT(EM_VA_AT,i)(__VA_ARGS__)
 #define EM_VA_AT0(x, ...) x
-// Given `a, b, ...` (or just `a, b`) returns `b`, and so on..
 #define EM_VA_AT1(p1, x, ...) x
 #define EM_VA_AT2(p1, p2, x, ...) x
 #define EM_VA_AT3(p1, p2, p3, x, ...) x
@@ -40,9 +39,10 @@
 
 // --- Those return nothing if the index is out of range:
 
-// Given `(a)...`, returns `a`. If `...` doesn't start with `(...)`, returns nothing.
+// Returns ith element in a `(a)(b)(c)` sequence. There can be junk at the end of the sequence, it's ignored.
+// If the index is out of range, returns nothing.
+#define EM_SEQ_TRY_AT(i, ...) EM_CAT(EM_SEQ_TRY_AT,i)(__VA_ARGS__)
 #define EM_SEQ_TRY_AT0(...) EM_TRY_ONLY_PARENS(__VA_ARGS__)
-// Given `(a)(b)...`, returns `b`. If `...` doesn't start with `(...)(...)`, returns nothing. And so on.
 #define EM_SEQ_TRY_AT1(...) EM_SEQ_TRY_AT0(EM_TRY_SKIP_PARENS(__VA_ARGS__))
 #define EM_SEQ_TRY_AT2(...) EM_SEQ_TRY_AT1(EM_TRY_SKIP_PARENS(__VA_ARGS__))
 #define EM_SEQ_TRY_AT3(...) EM_SEQ_TRY_AT2(EM_TRY_SKIP_PARENS(__VA_ARGS__))
@@ -51,9 +51,10 @@
 #define EM_SEQ_TRY_AT6(...) EM_SEQ_TRY_AT5(EM_TRY_SKIP_PARENS(__VA_ARGS__))
 #define EM_SEQ_TRY_AT7(...) EM_SEQ_TRY_AT6(EM_TRY_SKIP_PARENS(__VA_ARGS__))
 
-// Given `a, ...` (or just `a`) returns `a`. If the argument is empty, returns nothing.
+// Returns ith element in a `a, b, c` sequence.
+// If the index is out of range, returns nothing.
+#define EM_SEQ_TRY_AT(i, ...) EM_CAT(EM_SEQ_TRY_AT,i)(__VA_ARGS__)
 #define EM_VA_TRY_AT0(x, ...) x // Same as `EM_VA_AT0`.
-// Given `a, b, ...` (or just `a, b`), returns `b`. If the argument doesn't contain a comma, returns nothing.
 #define EM_VA_TRY_AT1(x, ...) __VA_OPT__(EM_VA_TRY_AT0(__VA_ARGS__))
 #define EM_VA_TRY_AT2(x, ...) __VA_OPT__(EM_VA_TRY_AT1(__VA_ARGS__))
 #define EM_VA_TRY_AT3(x, ...) __VA_OPT__(EM_VA_TRY_AT2(__VA_ARGS__))

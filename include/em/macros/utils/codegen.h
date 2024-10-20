@@ -6,9 +6,11 @@
 #include "em/macros/meta/sequence_for.h"
 
 /* A boilerplate generation helper. Duplicates `...` once for each element in `seq_`, replacing placeholders with the list elements.
-`seq_` is a list of the form `(...)(...)(...)`. Each element is either `(a,b,c)` or `((a)(b)(c)`, which are equivalent,
-  but the latter allows commas in the element.
-Placeholders in the `...` are are `EM_i` (or `_i_` is `SHORT_MACROS[_CODEGEN]` are enabled), which expands to `seq_[??][i]`.
+`seq_` is a list of the form `(a,b,c)(...)(...)`.
+Additionally each element (such as `a`,`b`,`c`) can be parenthesized (e.g. if it needs to contain commas),
+  the parentheses are removed automatically (but at most once per element, use `((a))` to get `(a)` in the expansion).
+
+Placeholders in the `...` are `EM_i` (or `_i_` iF `SHORT_MACROS[_CODEGEN]` is enabled), which expands to `seq_[??][i]`.
 If a placeholder appears inside of `(...)`, the parentheses must be preceded by `EM_P` (shortens to `_P_`).
 There are also optional placeholders `EM_i_OPT` (shorten to `_i_OPT_) that expand to nothing if not provided, instead of causing an error.
 `sep_` is a separator that's inserted between expansion. It can be parenthesized, the parentheses are stripepd (e.g. `(,)` to insert a comma).
@@ -22,7 +24,7 @@ Examples:
       int x = 1; int y = 2; int z = 3;
 
  2. int EM_CODEGEN(
-        ((a)(1,2,3))((b)(4,5,6)), // Alternative list style, allows commas in elements.
+        (a,(1,2,3))(b,(4,5,6)), // Parentheses allow for commas in the elements, they are removed automatically.
         (,), // Separator: comma.
         EM_1[] = {EM_2}
     );
@@ -41,10 +43,10 @@ Examples:
     #define MAYBE_CONST_LR(...) \
         EM_CODEGEN_LOW( \
             , \
-            (      & ,          (*this)) \
-            (const & ,          (*this)) \
-            (      &&, std::move(*this)) \
-            (const &&, std::move(*this)), \
+            (      & ,         ((*this))) \      // Need additional `(...)` because the one set of parentheses will get automatically removed.
+            (const & ,         ((*this))) \
+            (      &&, std::move(*this) ) \
+            (const &&, std::move(*this) ), \
             (), \
             (__VA_ARGS__) \
         )

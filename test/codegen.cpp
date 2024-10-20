@@ -2,6 +2,12 @@
 
 #include <string>
 
+int EM_CODEGEN(
+    (a,(1,2,3))(b,(4,5,6)), // Alternative list style, allows commas in elements.
+    (,), // Separator: comma.
+    EM_1[3] = {EM_2}
+);
+
 #define MAKE_ENUM(E, elems) \
     enum class E { \
         EM_CODEGEN(elems,, EM_1 MAYBE_INIT EM_P(EM_2_OPT),) \
@@ -19,19 +25,19 @@ MAKE_ENUM( E,
 )
 
 MAKE_ENUM( F,
-    ((a)(10))
+    ((a),(10))
     ((b))
-    ((c)(20))
+    ((c),(20))
 )
 
 
 #define MAYBE_CONST_LR(...) \
     EM_CODEGEN_LOW( \
         , \
-        (      & ,          (*this)) \
-        (const & ,          (*this)) \
-        (      &&, std::move(*this)) \
-        (const &&, std::move(*this)), \
+        (      & ,         ((*this))) \
+        (const & ,         ((*this))) \
+        (      &&, std::move(*this) ) \
+        (const &&, std::move(*this) ), \
         (), \
         (__VA_ARGS__) \
     )
