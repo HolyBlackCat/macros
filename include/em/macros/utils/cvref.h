@@ -23,6 +23,10 @@
 // E.g. `EM_MAYBE_CONST( EM_QUAL int &Foo EM_P(EM_QUAL int &x); )` expands to:
 //           int &Foo(      int &x);
 //     const int &Foo(const int &x);
+//
+// Note those macros interoperate with `EM_CODEGEN(...)` and act as `EM_CODEGEN(...)` calls for most purposes.
+// E.g. if you nest `EM_MAYBE_CONST(...)` in `EM_CODEGEN(...)`, you can and should use `EM_E` to escape `EM_QUAL` and `EM_FWD_SELF`.
+// See the comments on `EM_CODEGEN` for details.
 
 #define EM_MAYBE_CONST(...) \
     /* Using 'identity()' to expands macros when `EM_P` precede their arguments. */\
