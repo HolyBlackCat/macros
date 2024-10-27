@@ -1,12 +1,11 @@
 #pragma once
 
 #include "em/macros/detail/enable_short_macros.h"
+#include "em/macros/meta/common.h"
 #include "em/macros/meta/elem_by_index.h"
 
 // Those are used by `utils/codegen.h` and `utils/cvref.h`.
 
-// When a placeholder is used inside of `(...)`, those `(...)` must be preceded by `EM_P`.
-#define EM_P(...) )(DETAIL_EM_CGBITS_LPAREN,__VA_ARGS__)(DETAIL_EM_CGBITS_RPAREN,
 // Numbered placeholders.
 #define EM_1 )(DETAIL_EM_CGBITS_1,
 #define EM_2 )(DETAIL_EM_CGBITS_2,
@@ -26,8 +25,27 @@
 #define EM_7_OPT )(DETAIL_EM_CGBITS_7_OPT,
 #define EM_8_OPT )(DETAIL_EM_CGBITS_8_OPT,
 
+// When a placeholder is used inside of `(...)`, those `(...)` must be preceded by `EM_P`.
+#define EM_P(...) )(DETAIL_EM_CGBITS_LPAREN, __VA_ARGS__ )(DETAIL_EM_CGBITS_RPAREN,
+// Those are individual `(` and `)` parentheses. This is useful for nested loops, where `EM_P` starts to choke.
+#define EM_LP )(DETAIL_EM_CGBITS_LPAREN,
+#define EM_RP )(DETAIL_EM_CGBITS_RPAREN,
+
+// Escapes the argument. In particular, escapes all `_i_`, `_P_`, `_LP_`, `_RP_` in it.
+// When in a nested loop, this forces them to be expanded by the second most nested loop, rather than the most-nested loop.
+// You can nest them: `_E_(_E_(...))` delays the expansion to the third most nested loop.
+#define EM_E(...) DETAIL_EM_ESCAPE((__VA_ARGS__)())
+#define DETAIL_EM_ESCAPE(...) DETAIL_EM_ESCAPE_0 __VA_ARGS__
+#define DETAIL_EM_ESCAPE_0(...) __VA_ARGS__ DETAIL_EM_ESCAPE_A
+#define DETAIL_EM_ESCAPE_A(...) __VA_OPT__(DETAIL_EM_ESCAPE_BODY(__VA_ARGS__) DETAIL_EM_ESCAPE_B)
+#define DETAIL_EM_ESCAPE_B(...) __VA_OPT__(DETAIL_EM_ESCAPE_BODY(__VA_ARGS__) DETAIL_EM_ESCAPE_A)
+#define DETAIL_EM_ESCAPE_BODY(...) )(DETAIL_EM_CGBITS_RPAREN,)(DETAIL_EM_CGBITS_LPAREN, __VA_ARGS__
+
 #if EM_ENABLE_SHORT_MACROS(CODEGEN)
 #define _P_(...) )(DETAIL_EM_CGBITS_LPAREN,__VA_ARGS__)(DETAIL_EM_CGBITS_RPAREN, // Can't use `EM_P`, must write this directly.
+#define _LP_ EM_LP
+#define _RP_ EM_RP
+#define _E_(...) DETAIL_EM_ESCAPE((__VA_ARGS__)()) // Can't use `EM_E(...)`, must write this directly.
 #define _1_ EM_1
 #define _2_ EM_2
 #define _3_ EM_3

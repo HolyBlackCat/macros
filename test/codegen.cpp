@@ -1,3 +1,5 @@
+#define EM_SHORT_MACROS
+
 #include "em/macros/utils/codegen.h"
 
 #include <string>
@@ -53,3 +55,21 @@ struct A
         int QUAL foo() QUAL {return FWD_SELF.x;}
     )
 };
+
+// Nested loops:
+
+EM_CODEGEN((c,30)(b,40),,
+    EM_CODEGEN((a,10)(b,20),,
+        int EM_CAT EM_E(EM_LP) EM_1, EM_E(EM_1 EM_RP) = EM_2 * EM_E(EM_2);
+    )
+)
+
+// Triple nested loops, and also test the short names:
+
+EM_CODEGEN((e,50)(f,60),,
+    EM_CODEGEN((c,30)(b,40),,
+        EM_CODEGEN((a,10)(b,20),,
+            int EM_CAT3 _E_(_E_(_LP_)) _1_, _E_(_1_), _E_(_E_(_1_)) _E_(_E_(_RP_)) = _2_ * _E_(_2_) * _E_(_E_(_2_));
+        )
+    )
+)

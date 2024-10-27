@@ -23,9 +23,9 @@
 #define DETAIL_EM_CAT3(x, y, z) x##y##z
 #define DETAIL_EM_CAT4(x, y, z, w) x##y##z##w
 
-// Appends `_end` to the end of `...`. This helps writing a certain kind of preprocessor loops.
+// Appends `_END` to the end of `...`. This helps writing a certain kind of preprocessor loops.
 #define EM_END(...) DETAIL_EM_END(__VA_ARGS__)
-#define DETAIL_EM_END(...) __VA_ARGS__##_end
+#define DETAIL_EM_END(...) __VA_ARGS__##_END
 
 // Some constants.
 #define EM_COMMA(...) ,
