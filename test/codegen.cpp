@@ -3,6 +3,7 @@
 #include "em/macros/utils/codegen.h"
 
 #include <string>
+#include <vector>
 
 int EM_CODEGEN(
     (a,(1,2,3))(b,(4,5,6)), // Alternative list style, allows commas in elements.
@@ -72,4 +73,24 @@ EM_CODEGEN((e,50)(f,60),,
             int EM_CAT3 _E_(_E_(_LP_)) _1_, _E_(_1_), _E_(_E_(_1_)) _E_(_E_(_RP_)) = _2_ * _E_(_2_) * _E_(_E_(_2_));
         )
     )
+)
+
+
+
+// Pasting all remaining arguments:
+
+EM_CODEGEN(
+    (rem_a,(int)1,2,3) // The parentheses are not expanded by `_PLUS_`!
+    (rem_b)
+,,
+    std::vector<int> _1_ = {_2_PLUS_};
+)
+
+// Pasting all remaining arguments with out-of-range
+
+EM_CODEGEN(
+    (remopt_a,unused,1,2,3)
+    (remopt_b)
+,,
+    std::vector<int> _1_ = {_3_PLUS_OPT_};
 )

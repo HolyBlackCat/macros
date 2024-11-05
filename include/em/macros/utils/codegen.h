@@ -12,8 +12,13 @@ Additionally each element (such as `a`,`b`,`c`) can be parenthesized (e.g. if it
 
 Placeholders in the `...` are `EM_i` (or `_i_` iF `SHORT_MACROS[_CODEGEN]` is enabled), which expands to `seq_[??][i]`.
 If a placeholder appears inside of `(...)`, the parentheses must be preceded by `EM_P` (shortens to `_P_`).
+
 There are also optional placeholders `EM_i_OPT` (shorten to `_i_OPT_) that expand to nothing if not provided, instead of causing an error.
 `sep_` is a separator that's inserted between expansion. It can be parenthesized, the parentheses are stripepd (e.g. `(,)` to insert a comma).
+
+There are also `EM_i_PLUS` (shorten to `_i_PLUS_`) and `EM_i_PLUS_OPT` (shorten to `_i_PLUS_OPT_`). Those return all remaining arguments starting
+  from the specified index, rather than just one. Unlike non-PLUS versions, they don't expand any parentheses, because that wouldn't make sense.
+When the ith argument is empty, the preceding comma is optional even for the non-OPT version. So the OPT version is rarely needed.
 
 See below for a discussion of nested loops.
 
@@ -88,8 +93,23 @@ Examples:
         (c,20)
     )
 
+ 6. // Using `PLUS` placeholders:
+    EM_CODEGEN(
+        (rem_a,(int)1,2,3) // The parentheses are not expanded by `PLUS`!
+        (rem_b)
+    ,,
+        std::vector<int> EM_1 = {EM_2_PLUS};
+    )
+    // And `PLUS_OPT` placeholders:
+    EM_CODEGEN(
+        (remopt_a,unused,1,2,3)
+        (remopt_b)
+    ,,
+        std::vector<int> EM_1 = {EM_3_PLUS_OPT}; // A plain `EM_3_PLUS` would fail here. `EM_2_PLUS` would work though, it doesn't need a leading comma.
+    )
 
-Nested loops:
+
+--- Nested loops:
 
 `EM_CODEGEN` can be nested freely. You don't need to use different macros, `EM_CODEGEN` can be nested into itself.
 Use `EM_E(...)` (shortens to `_E_`) to delay the expansion of `EM_i` and/or `EM_P`.

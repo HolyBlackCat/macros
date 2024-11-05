@@ -6,7 +6,7 @@
 
 // Those are used by `utils/codegen.h` and `utils/cvref.h`.
 
-// Numbered placeholders.
+// Numbered placeholders. Those silently expand `(...)` around the argument, if any.
 #define EM_1 )(DETAIL_EM_CGBITS_1,
 #define EM_2 )(DETAIL_EM_CGBITS_2,
 #define EM_3 )(DETAIL_EM_CGBITS_3,
@@ -15,7 +15,7 @@
 #define EM_6 )(DETAIL_EM_CGBITS_6,
 #define EM_7 )(DETAIL_EM_CGBITS_7,
 #define EM_8 )(DETAIL_EM_CGBITS_8,
-// Those silently return nothing if out of range, instead of failing.
+// Same, but those silently return nothing if out of range, instead of failing.
 #define EM_1_OPT )(DETAIL_EM_CGBITS_1_OPT,
 #define EM_2_OPT )(DETAIL_EM_CGBITS_2_OPT,
 #define EM_3_OPT )(DETAIL_EM_CGBITS_3_OPT,
@@ -24,6 +24,24 @@
 #define EM_6_OPT )(DETAIL_EM_CGBITS_6_OPT,
 #define EM_7_OPT )(DETAIL_EM_CGBITS_7_OPT,
 #define EM_8_OPT )(DETAIL_EM_CGBITS_8_OPT,
+// Those return all arguments starting from a specific index. Those don't silently expand the `(...)`, because that would make no sense.
+#define EM_1_PLUS )(DETAIL_EM_CGBITS_1_PLUS,
+#define EM_2_PLUS )(DETAIL_EM_CGBITS_2_PLUS,
+#define EM_3_PLUS )(DETAIL_EM_CGBITS_3_PLUS,
+#define EM_4_PLUS )(DETAIL_EM_CGBITS_4_PLUS,
+#define EM_5_PLUS )(DETAIL_EM_CGBITS_5_PLUS,
+#define EM_6_PLUS )(DETAIL_EM_CGBITS_6_PLUS,
+#define EM_7_PLUS )(DETAIL_EM_CGBITS_7_PLUS,
+#define EM_8_PLUS )(DETAIL_EM_CGBITS_8_PLUS,
+// Same, but those silently return nothing if out of range, instead of failing.
+#define EM_1_PLUS_OPT )(DETAIL_EM_CGBITS_1_PLUS_OPT,
+#define EM_2_PLUS_OPT )(DETAIL_EM_CGBITS_2_PLUS_OPT,
+#define EM_3_PLUS_OPT )(DETAIL_EM_CGBITS_3_PLUS_OPT,
+#define EM_4_PLUS_OPT )(DETAIL_EM_CGBITS_4_PLUS_OPT,
+#define EM_5_PLUS_OPT )(DETAIL_EM_CGBITS_5_PLUS_OPT,
+#define EM_6_PLUS_OPT )(DETAIL_EM_CGBITS_6_PLUS_OPT,
+#define EM_7_PLUS_OPT )(DETAIL_EM_CGBITS_7_PLUS_OPT,
+#define EM_8_PLUS_OPT )(DETAIL_EM_CGBITS_8_PLUS_OPT,
 
 // When a placeholder is used inside of `(...)`, those `(...)` must be preceded by `EM_P`.
 #define EM_P(...) )(DETAIL_EM_CGBITS_LPAREN, __VA_ARGS__ )(DETAIL_EM_CGBITS_RPAREN,
@@ -62,10 +80,27 @@
 #define _6_OPT_ EM_6_OPT
 #define _7_OPT_ EM_7_OPT
 #define _8_OPT_ EM_8_OPT
+#define _1_PLUS_ EM_1_PLUS
+#define _2_PLUS_ EM_2_PLUS
+#define _3_PLUS_ EM_3_PLUS
+#define _4_PLUS_ EM_4_PLUS
+#define _5_PLUS_ EM_5_PLUS
+#define _6_PLUS_ EM_6_PLUS
+#define _7_PLUS_ EM_7_PLUS
+#define _8_PLUS_ EM_8_PLUS
+#define _1_PLUS_OPT_ EM_1_PLUS_OPT
+#define _2_PLUS_OPT_ EM_2_PLUS_OPT
+#define _3_PLUS_OPT_ EM_3_PLUS_OPT
+#define _4_PLUS_OPT_ EM_4_PLUS_OPT
+#define _5_PLUS_OPT_ EM_5_PLUS_OPT
+#define _6_PLUS_OPT_ EM_6_PLUS_OPT
+#define _7_PLUS_OPT_ EM_7_PLUS_OPT
+#define _8_PLUS_OPT_ EM_8_PLUS_OPT
 #endif
 
 #define DETAIL_EM_CGBITS_LPAREN(...) (
 #define DETAIL_EM_CGBITS_RPAREN(...) )
+
 #define DETAIL_EM_CGBITS_1(...) EM_TRY_EXPAND_PARENS(EM_VA_AT0(__VA_ARGS__))
 #define DETAIL_EM_CGBITS_2(...) EM_TRY_EXPAND_PARENS(EM_VA_AT1(__VA_ARGS__))
 #define DETAIL_EM_CGBITS_3(...) EM_TRY_EXPAND_PARENS(EM_VA_AT2(__VA_ARGS__))
@@ -74,6 +109,7 @@
 #define DETAIL_EM_CGBITS_6(...) EM_TRY_EXPAND_PARENS(EM_VA_AT5(__VA_ARGS__))
 #define DETAIL_EM_CGBITS_7(...) EM_TRY_EXPAND_PARENS(EM_VA_AT6(__VA_ARGS__))
 #define DETAIL_EM_CGBITS_8(...) EM_TRY_EXPAND_PARENS(EM_VA_AT7(__VA_ARGS__))
+
 #define DETAIL_EM_CGBITS_1_OPT(...) EM_TRY_EXPAND_PARENS(EM_VA_TRY_AT0(__VA_ARGS__))
 #define DETAIL_EM_CGBITS_2_OPT(...) EM_TRY_EXPAND_PARENS(EM_VA_TRY_AT1(__VA_ARGS__))
 #define DETAIL_EM_CGBITS_3_OPT(...) EM_TRY_EXPAND_PARENS(EM_VA_TRY_AT2(__VA_ARGS__))
@@ -82,3 +118,21 @@
 #define DETAIL_EM_CGBITS_6_OPT(...) EM_TRY_EXPAND_PARENS(EM_VA_TRY_AT5(__VA_ARGS__))
 #define DETAIL_EM_CGBITS_7_OPT(...) EM_TRY_EXPAND_PARENS(EM_VA_TRY_AT6(__VA_ARGS__))
 #define DETAIL_EM_CGBITS_8_OPT(...) EM_TRY_EXPAND_PARENS(EM_VA_TRY_AT7(__VA_ARGS__))
+
+#define DETAIL_EM_CGBITS_1_PLUS(...) EM_VA_SKIP0(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_2_PLUS(...) EM_VA_SKIP1(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_3_PLUS(...) EM_VA_SKIP2(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_4_PLUS(...) EM_VA_SKIP3(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_5_PLUS(...) EM_VA_SKIP4(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_6_PLUS(...) EM_VA_SKIP5(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_7_PLUS(...) EM_VA_SKIP6(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_8_PLUS(...) EM_VA_SKIP7(__VA_ARGS__)
+
+#define DETAIL_EM_CGBITS_1_PLUS_OPT(...) EM_VA_TRY_SKIP0(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_2_PLUS_OPT(...) EM_VA_TRY_SKIP1(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_3_PLUS_OPT(...) EM_VA_TRY_SKIP2(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_4_PLUS_OPT(...) EM_VA_TRY_SKIP3(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_5_PLUS_OPT(...) EM_VA_TRY_SKIP4(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_6_PLUS_OPT(...) EM_VA_TRY_SKIP5(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_7_PLUS_OPT(...) EM_VA_TRY_SKIP6(__VA_ARGS__)
+#define DETAIL_EM_CGBITS_8_PLUS_OPT(...) EM_VA_TRY_SKIP7(__VA_ARGS__)

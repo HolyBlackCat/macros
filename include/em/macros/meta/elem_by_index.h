@@ -32,6 +32,17 @@
 #define EM_VA_AT6(p1, p2, p3, p4, p5, p6, x, ...) x
 #define EM_VA_AT7(p1, p2, p3, p4, p5, p6, p7, x, ...) x
 
+// Returns all elements starting from ith, in a `a, b, c` sequence.
+#define EM_VA_SKIP(i, ...) EM_CAT(EM_VA_SKIP,i)(__VA_ARGS__)
+#define EM_VA_SKIP0(...) __VA_ARGS__
+#define EM_VA_SKIP1(p1, ...) __VA_ARGS__
+#define EM_VA_SKIP2(p1, p2, ...) __VA_ARGS__
+#define EM_VA_SKIP3(p1, p2, p3, ...) __VA_ARGS__
+#define EM_VA_SKIP4(p1, p2, p3, p4, ...) __VA_ARGS__
+#define EM_VA_SKIP5(p1, p2, p3, p4, p5, ...) __VA_ARGS__
+#define EM_VA_SKIP6(p1, p2, p3, p4, p5, p6, ...) __VA_ARGS__
+#define EM_VA_SKIP7(p1, p2, p3, p4, p5, p6, p7, ...) __VA_ARGS__
+
 
 // Returns ith element in `(a)(b)(c)` or `a, b, c` list. Automatically detects the list type.
 #define EM_VA_OR_SEQ_AT(i, ...) EM_CAT4(EM_, EM_CLASSIFY_LIST(__VA_ARGS__), _AT, i)(__VA_ARGS__)
@@ -62,6 +73,19 @@
 #define EM_VA_TRY_AT5(x, ...) __VA_OPT__(EM_VA_TRY_AT4(__VA_ARGS__))
 #define EM_VA_TRY_AT6(x, ...) __VA_OPT__(EM_VA_TRY_AT5(__VA_ARGS__))
 #define EM_VA_TRY_AT7(x, ...) __VA_OPT__(EM_VA_TRY_AT6(__VA_ARGS__))
+
+// Returns all elements starting from ith, in a `a, b, c` sequence.
+// If the index is out of range, returns nothing.
+#define EM_VA_TRY_SKIP(i, ...) EM_CAT(EM_VA_TRY_SKIP,i)(__VA_ARGS__)
+#define EM_VA_TRY_SKIP0(...) __VA_ARGS__
+#define EM_VA_TRY_SKIP1(x, ...) __VA_OPT__(EM_VA_TRY_SKIP0(__VA_ARGS__))
+#define EM_VA_TRY_SKIP2(x, ...) __VA_OPT__(EM_VA_TRY_SKIP1(__VA_ARGS__))
+#define EM_VA_TRY_SKIP3(x, ...) __VA_OPT__(EM_VA_TRY_SKIP2(__VA_ARGS__))
+#define EM_VA_TRY_SKIP4(x, ...) __VA_OPT__(EM_VA_TRY_SKIP3(__VA_ARGS__))
+#define EM_VA_TRY_SKIP5(x, ...) __VA_OPT__(EM_VA_TRY_SKIP4(__VA_ARGS__))
+#define EM_VA_TRY_SKIP6(x, ...) __VA_OPT__(EM_VA_TRY_SKIP5(__VA_ARGS__))
+#define EM_VA_TRY_SKIP7(x, ...) __VA_OPT__(EM_VA_TRY_SKIP6(__VA_ARGS__))
+
 
 // Returns ith element in `(a)(b)(c)` or `a, b, c` list. Automatically detects the list type. Returns nothing if out of range.
 #define EM_VA_OR_SEQ_TRY_AT(i, ...) EM_CAT4(EM_, EM_CLASSIFY_LIST(__VA_ARGS__), _TRY_AT, i)(__VA_ARGS__)
