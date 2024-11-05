@@ -4,7 +4,7 @@
 #include "em/macros/meta/common.h"
 #include "em/macros/meta/elem_by_index.h"
 
-// Those are used by `utils/codegen.h` and `utils/cvref.h`.
+// Those are used by `meta/codegen.h` and `utils/cvref.h`.
 
 // Numbered placeholders. Those silently expand `(...)` around the argument, if any.
 #define EM_1 )(DETAIL_EM_CGBITS_1,

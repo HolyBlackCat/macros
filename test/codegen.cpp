@@ -1,6 +1,6 @@
 #define EM_SHORT_MACROS
 
-#include "em/macros/utils/codegen.h"
+#include "em/macros/meta/codegen.h"
 
 #include <string>
 #include <vector>
