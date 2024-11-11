@@ -10,7 +10,7 @@
 Additionally each element (such as `a`,`b`,`c`) can be parenthesized (e.g. if it needs to contain commas),
   the parentheses are removed automatically (but at most once per element, use `((a))` to get `(a)` in the expansion).
 
-Placeholders in the `...` are `EM_i` (or `_i_` iF `SHORT_MACROS[_CODEGEN]` is enabled), which expands to `seq_[??][i]`.
+Placeholders in the `...` are `EM_i` (or `_i_` if `EM_SHORT_MACROS[_CODEGEN]` is defined), which expands to `seq_[??][i]`.
 If a placeholder appears inside of `(...)`, the parentheses must be preceded by `EM_P` (shortens to `_P_`).
 
 There are also optional placeholders `EM_i_OPT` (shorten to `_i_OPT_) that expand to nothing if not provided, instead of causing an error.
