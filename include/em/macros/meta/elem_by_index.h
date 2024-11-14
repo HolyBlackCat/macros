@@ -20,6 +20,7 @@
 #define EM_SEQ_AT5(...) EM_SEQ_AT4(EM_EMPTY __VA_ARGS__)
 #define EM_SEQ_AT6(...) EM_SEQ_AT5(EM_EMPTY __VA_ARGS__)
 #define EM_SEQ_AT7(...) EM_SEQ_AT6(EM_EMPTY __VA_ARGS__)
+#define EM_SEQ_AT8(...) EM_SEQ_AT7(EM_EMPTY __VA_ARGS__)
 
 // Returns ith element in a `a, b, c` sequence.
 #define EM_VA_AT(i, ...) EM_CAT(EM_VA_AT,i)(__VA_ARGS__)
@@ -31,6 +32,7 @@
 #define EM_VA_AT5(p1, p2, p3, p4, p5, x, ...) x
 #define EM_VA_AT6(p1, p2, p3, p4, p5, p6, x, ...) x
 #define EM_VA_AT7(p1, p2, p3, p4, p5, p6, p7, x, ...) x
+#define EM_VA_AT8(p1, p2, p3, p4, p5, p6, p7, p8, x, ...) x
 
 // Returns all elements starting from ith, in a `a, b, c` sequence.
 #define EM_VA_SKIP(i, ...) EM_CAT(EM_VA_SKIP,i)(__VA_ARGS__)
@@ -42,6 +44,7 @@
 #define EM_VA_SKIP5(p1, p2, p3, p4, p5, ...) __VA_ARGS__
 #define EM_VA_SKIP6(p1, p2, p3, p4, p5, p6, ...) __VA_ARGS__
 #define EM_VA_SKIP7(p1, p2, p3, p4, p5, p6, p7, ...) __VA_ARGS__
+#define EM_VA_SKIP8(p1, p2, p3, p4, p5, p6, p7, p8, ...) __VA_ARGS__
 
 
 // Returns ith element in `(a)(b)(c)` or `a, b, c` list. Automatically detects the list type.
@@ -61,6 +64,7 @@
 #define EM_SEQ_TRY_AT5(...) EM_SEQ_TRY_AT4(EM_TRY_SKIP_PARENS(__VA_ARGS__))
 #define EM_SEQ_TRY_AT6(...) EM_SEQ_TRY_AT5(EM_TRY_SKIP_PARENS(__VA_ARGS__))
 #define EM_SEQ_TRY_AT7(...) EM_SEQ_TRY_AT6(EM_TRY_SKIP_PARENS(__VA_ARGS__))
+#define EM_SEQ_TRY_AT8(...) EM_SEQ_TRY_AT7(EM_TRY_SKIP_PARENS(__VA_ARGS__))
 
 // Returns ith element in a `a, b, c` sequence.
 // If the index is out of range, returns nothing.
@@ -73,6 +77,7 @@
 #define EM_VA_TRY_AT5(x, ...) __VA_OPT__(EM_VA_TRY_AT4(__VA_ARGS__))
 #define EM_VA_TRY_AT6(x, ...) __VA_OPT__(EM_VA_TRY_AT5(__VA_ARGS__))
 #define EM_VA_TRY_AT7(x, ...) __VA_OPT__(EM_VA_TRY_AT6(__VA_ARGS__))
+#define EM_VA_TRY_AT8(x, ...) __VA_OPT__(EM_VA_TRY_AT7(__VA_ARGS__))
 
 // Returns all elements starting from ith, in a `a, b, c` sequence.
 // If the index is out of range, returns nothing.
@@ -85,6 +90,7 @@
 #define EM_VA_TRY_SKIP5(x, ...) __VA_OPT__(EM_VA_TRY_SKIP4(__VA_ARGS__))
 #define EM_VA_TRY_SKIP6(x, ...) __VA_OPT__(EM_VA_TRY_SKIP5(__VA_ARGS__))
 #define EM_VA_TRY_SKIP7(x, ...) __VA_OPT__(EM_VA_TRY_SKIP6(__VA_ARGS__))
+#define EM_VA_TRY_SKIP8(x, ...) __VA_OPT__(EM_VA_TRY_SKIP7(__VA_ARGS__))
 
 
 // Returns ith element in `(a)(b)(c)` or `a, b, c` list. Automatically detects the list type. Returns nothing if out of range.
