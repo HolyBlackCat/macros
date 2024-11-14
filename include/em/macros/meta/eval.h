@@ -28,6 +28,8 @@
 //
 //   `EM_i` variables can appear inside of `EM_SET_i(...)`, e.g. `SET_EM_A( EM_A + EM_B )`.
 //
+//   We also provide helpers such as `EM_A0` that call `EM_VA_ATi` at the respective variable, and ALSO expand the parentheses if any.
+//
 // --- PASSING CODE AS FUNCTION PARAMETERS ---
 //
 //   If you pass a piece of code with `EM_i`, `EM_P`, etc in it to another macro, the first macro in the chain must immeiately wrap it in `(...)`,
@@ -75,8 +77,40 @@
 #define EM_F )(var,5)(emit,
 #define EM_G )(var,6)(emit,
 #define EM_H )(var,7)(emit,
-#define EM_I )(var,8)(emit, // The current loop element.
+#define EM_I )(var,8)(emit,
 
+// Indexed access helpers for variables.
+#define EM_A0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_A))
+#define EM_B0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_B))
+#define EM_C0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_C))
+#define EM_D0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_D))
+#define EM_E0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_E))
+#define EM_F0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_F))
+#define EM_G0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_G))
+#define EM_H0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_H))
+#define EM_I0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_I))
+
+#define EM_A1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_A))
+#define EM_B1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_B))
+#define EM_C1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_C))
+#define EM_D1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_D))
+#define EM_E1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_E))
+#define EM_F1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_F))
+#define EM_G1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_G))
+#define EM_H1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_H))
+#define EM_I1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_I))
+
+#define EM_A2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_A))
+#define EM_B2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_B))
+#define EM_C2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_C))
+#define EM_D2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_D))
+#define EM_E2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_E))
+#define EM_F2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_F))
+#define EM_G2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_G))
+#define EM_H2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_H))
+#define EM_I2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_I))
+
+// Variable setters:
 #define EM_SET_A(...) )(set,0,(emit,__VA_ARGS__))(emit,
 #define EM_SET_B(...) )(set,1,(emit,__VA_ARGS__))(emit,
 #define EM_SET_C(...) )(set,2,(emit,__VA_ARGS__))(emit,
@@ -87,6 +121,7 @@
 #define EM_SET_H(...) )(set,7,(emit,__VA_ARGS__))(emit,
 #define EM_SET_I(...) )(set,8,(emit,__VA_ARGS__))(emit,
 
+// Foreach loops:
 #define EM_FOREACH_A(seq, ...) )(foreach,0,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
 #define EM_FOREACH_B(seq, ...) )(foreach,1,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
 #define EM_FOREACH_C(seq, ...) )(foreach,2,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
@@ -98,10 +133,7 @@
 #define EM_FOREACH_I(seq, ...) )(foreach,8,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
 #define DETAIL_EM_FOREACH(...) (emit,__VA_ARGS__))(emit,
 
-// This receives only the first `()` out of a pattern, but we actually don't mind.
-#define DETAIL_EM_EVAL_CODE(...) (emit,__VA_ARGS__)
-
-#define EM_EVAL(...) DETAIL_EM_EVAL(((/*A*/),(/*B*/),(/*C*/),(/*D*/),(/*E*/),(/*F*/),(/*G*/),(/*H*/),(/*I*/)), DETAIL_EM_EVAL_CODE(__VA_ARGS__))
+#define EM_EVAL(...) DETAIL_EM_EVAL(((/*A*/),(/*B*/),(/*C*/),(/*D*/),(/*E*/),(/*F*/),(/*G*/),(/*H*/),(/*I*/)), (emit,__VA_ARGS__))
 // Can't have `n` as the parameter, it breaks recursion.
 #define DETAIL_EM_EVAL(data, code)  SF_FOR_EACH (DETAIL_EM_EVAL_BODY, DETAIL_EM_EVAL_STEP , SF_NULL, (EM_IDENTITY data), code)
 #define DETAIL_EM_EVAL0(data, code) SF_FOR_EACH0(DETAIL_EM_EVAL_BODY, DETAIL_EM_EVAL_STEP0, SF_NULL, (EM_IDENTITY data), code)

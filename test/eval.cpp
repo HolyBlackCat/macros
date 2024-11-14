@@ -41,14 +41,10 @@ int main()
         std::cout << "Sum: " << EM_C << '\n';
     )
 
-    // EM_EVAL(
-    //     EM_FOREACH_I( (1)(2)(3) )
-    //     (
-    //         EM_SET_A( EM_I )
-    //         EM_FOREACH( (10)(20)(30) )
-    //         (
-    //             std::cout << EM_A * EM_I << '\n';
-    //         )
-    //     )
-    // )
+    EM_EVAL(
+        EM_FOREACH_I( ((int a),1)((float b),2)((char c),3) )
+        (
+            [[maybe_unused]] EM_I0 = EM_I1;
+        )
+    )
 }
