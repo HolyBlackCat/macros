@@ -4,7 +4,7 @@
 #include "em/macros/meta/common.h"
 #include "em/macros/meta/optional_parens.h"
 
-// Macros get elements from lists by index.
+// Macros to get elements from lists by their indices.
 
 
 // --- Those fail if the index is out of range:

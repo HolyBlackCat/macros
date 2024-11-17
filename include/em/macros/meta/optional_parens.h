@@ -5,7 +5,7 @@
 // Those macros help you work with parentheses, especially optional parentheses.
 
 // Given `(a)...`, returns `a`.
-// If you want the elements after the first, use `em/macros/meta/elem_by_index.h`.
+// If you want the elements after the first, use `em/macros/meta/indexing.h`.
 // In some cases you want to reimplement this instead of calling directly. E.g. `EM_SEQ_AT0` has to reimplement this, or `EM_CODEGEN` starts choking.
 #define EM_SEQ_FIRST(...) DETAIL_EM_SEQ_FIRST __VA_ARGS__ )
 #define DETAIL_EM_SEQ_FIRST(...) __VA_ARGS__ EM_EMPTY(

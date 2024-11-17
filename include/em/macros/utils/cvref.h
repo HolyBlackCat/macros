@@ -1,6 +1,6 @@
 #pragma once
 
-#include "em/macros/meta/elem_by_index.h"
+#include "em/macros/meta/indexing.h"
 #include "em/macros/meta/eval.h"
 
 // Those repeat the `...` fragment several times, expanding `EM_QUAL` to different qualifiers.
