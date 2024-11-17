@@ -3,6 +3,10 @@
 // Returns nothing.
 #define EM_EMPTY(...)
 
+// Causes a preprocessor-time error. `message` should be a string literal explanation.
+// But if `message` is empty (doesn't have even the quotes), has no effect.
+#define EM_FAIL(message) EM_EMPTY(message##!)
+
 // Returns `...` unchanged. Throwing in a few equivalent overloads to help with recursive macros.
 #define EM_IDENTITY(...) __VA_ARGS__
 #define EM_IDENTITY_A(...) __VA_ARGS__
