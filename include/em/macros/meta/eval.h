@@ -7,8 +7,10 @@
 
 // This is a micro programming language implemented in the preprocessor, which helps write advanced macros.
 //
-// WARNING: As of Clangd 19, when you have syntax errors near the `EM_EVAL(...)` macro call (not necessarily invalid macro syntax,
-//   it seems any syntax errors can cause this), Clangd can hang. Restart it after fixing the errors and it'll work correctly.
+// WARNING: Sometimes Clangd can hang when you have syntax errors near the `EM_EVAL(...)` macro call (not necessarily invalid macro syntax,
+//   and not all errors trigger this; one example is adding junk after a complex macro call).
+// Restarting Clangd after fixing the syntax errors unhangs it, or it can unhang by itself after a few minutes.
+// Last tested on Clangd 19.
 //
 // --- BASICS ---
 //
