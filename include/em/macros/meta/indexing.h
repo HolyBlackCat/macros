@@ -23,6 +23,7 @@
 #define EM_SEQ_AT8(...) EM_SEQ_AT7(EM_EMPTY __VA_ARGS__)
 
 // Returns ith element in a `a, b, c` sequence.
+// The `EM_VA_AT(i, ...)` version can also be used to first expand the macros in the arguments.
 #define EM_VA_AT(i, ...) EM_CAT(EM_VA_AT,i)(__VA_ARGS__)
 #define EM_VA_AT0(x, ...) x
 #define EM_VA_AT1(p1, x, ...) x
@@ -35,6 +36,7 @@
 #define EM_VA_AT8(p1, p2, p3, p4, p5, p6, p7, p8, x, ...) x
 
 // Returns all elements starting from ith, in a `a, b, c` sequence.
+// The `EM_VA_SKIP(i, ...)` version can also be used to first expand the macros in the arguments.
 #define EM_VA_SKIP(i, ...) EM_CAT(EM_VA_SKIP,i)(__VA_ARGS__)
 #define EM_VA_SKIP0(...) __VA_ARGS__
 #define EM_VA_SKIP1(p1, ...) __VA_ARGS__

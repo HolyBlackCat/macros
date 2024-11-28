@@ -13,3 +13,10 @@
 #define DETAIL_EM_IF_EMPTY(a, b, .../*cond*/) EM_CAT(DETAIL_EM_IF_EMPTY_, __VA_OPT__(1))(a, b)
 #define DETAIL_EM_IF_EMPTY_(a, b) EM_IDENTITY a
 #define DETAIL_EM_IF_EMPTY_1(a, b) EM_IDENTITY b
+
+// `EM_IF_COMMA((cond),(a),(b))` expands to `a` if `cond` contains at least one comma, or to `b` otherwise.
+#define EM_IF_COMMA(cond, a, b) DETAIL_EM_IF_COMMA(EM_IDENTITY cond x)(a, b)
+#define DETAIL_EM_IF_COMMA(...) DETAIL_EM_IF_COMMA_A(__VA_ARGS__)
+#define DETAIL_EM_IF_COMMA_A(unused, ...) EM_CAT(DETAIL_EM_IF_COMMA_, __VA_OPT__(1))
+#define DETAIL_EM_IF_COMMA_(a, b) EM_IDENTITY b
+#define DETAIL_EM_IF_COMMA_1(a, b) EM_IDENTITY a
