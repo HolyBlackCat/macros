@@ -35,6 +35,13 @@
 #define EM_VA_FIRST(...) DETAIL_EM_VA_FIRST(__VA_ARGS__)
 #define DETAIL_EM_VA_FIRST(x, ...) x
 
+// Returns `m(...)`. You can use this to make sure that deferred commas actually act as argument separators.
+#define EM_CALL(m, ...) m(__VA_ARGS__)
+#define EM_CALL_A(m, ...) m(__VA_ARGS__)
+#define EM_CALL_B(m, ...) m(__VA_ARGS__)
+#define EM_CALL_C(m, ...) m(__VA_ARGS__)
+#define EM_CALL_D(m, ...) m(__VA_ARGS__)
+
 // Some constants.
 #define EM_COMMA(...) ,
 #define EM_LPAREN(...) (
