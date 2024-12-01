@@ -31,6 +31,10 @@
 #define EM_END(...) DETAIL_EM_END(__VA_ARGS__)
 #define DETAIL_EM_END(...) __VA_ARGS__##_END
 
+// Returns the first element of a comma-separated list.
+#define EM_VA_FIRST(...) DETAIL_EM_VA_FIRST(__VA_ARGS__)
+#define DETAIL_EM_VA_FIRST(x, ...) x
+
 // Some constants.
 #define EM_COMMA(...) ,
 #define EM_LPAREN(...) (
