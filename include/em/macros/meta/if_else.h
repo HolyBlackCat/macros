@@ -33,6 +33,12 @@
 #define EM_IF_COMMA(...) DETAIL_EM_IF_COMMA(__VA_ARGS__ x)
 #define DETAIL_EM_IF_COMMA(unused, ...) EM_CAT(DETAIL_EM_IF_THEN_, __VA_OPT__(1))
 
+// Usage: `EM_IF_CAT_ADDS_COMMA(x, ...)(a)(b)`.
+// Concats `x` and `...`. If that creates a new comma, then returns `a`. Otherwise `b`.
+// `...`, `a`, and `b` all can contain commas. Existing commas in `...` are ignored, we only check if a new one was added.
+// This is good for checking if `...` starts with a specific word, by creating a `#define FOO_word ,` and passing `FOO_` as `x`.
+#define EM_IF_CAT_ADDS_COMMA(x, ...) EM_IF_COMMA(EM_CAT(x, EM_VA_FIRST(__VA_ARGS__)))
+
 
 // --- 0 and 1:
 
