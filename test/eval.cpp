@@ -1,8 +1,5 @@
-#include <em/macros/meta/common.h>
-#include <em/macros/meta/indexing.h>
-#include <em/macros/meta/optional_parens.h>
-#include <em/macros/meta/sequence_for.h>
-#include <em/macros/utils/cvref.h>
+#include "em/macros/meta/eval.h"
+#include "em/macros/utils/cvref.h"
 
 #include <iostream>
 
@@ -42,7 +39,7 @@ int main()
     )
 
     EM_EVAL(
-        EM_FOREACH_I( ((int a),1)((float b),2)((char c),3) )
+        EM_FOREACH_I( ((int aa),1)((float bb),2)((char cc),3) )
         (
             [[maybe_unused]] EM_I0 = EM_I1;
         )
