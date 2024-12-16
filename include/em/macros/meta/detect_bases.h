@@ -7,12 +7,18 @@
 // This file requires the `em/meta` repository to function.
 
 // This lets you detect bases of a class. The bases must be marked with the `EM_DETECTABLE_BASE(...)` macro, see below.
-// Then you can list those bases using `em::Macros::DetectBases::{All,Virtual,NonVirtual}Bases{Flat,Direct}{,AndSelf}`,
-//   which return `em::Meta::TypeList<...>`.
+// Then you can list those bases using `em::Macros::DetectBases::{All,Virtual,NonVirtual}Bases{Flat,Direct}{,AndSelf}`, which return `em::Meta::TypeList<...>`.
 // `Flat` recursively returns bases of bases too. `AndSelf` includes the self type at the end of the list.
 // Not all combinations are implemented: `Direct` is only implemented for `NonVirtual`. It doesn't make much sense for other variants anyway.
 //
 // Most often you'll be using it like this: first iterate over `VirtualBasesFlatAndSelf`, then recursively iterate over `NonVirtualBasesDirect`.
+//
+// LIMITATIONS:
+//   1. If the same base appears as both virtual and non-virtual (both possibly nested) in the same class, then the virtual one will not be detected.
+//        This will get fixed when `std::is_virtual_base_of` becomes available and we switch to it. It's a limitation of the handwritten replacement trait.
+//   2. If an ambiguous base is both a direct and an indirect base, then the direct copy will get skipped.
+//        That direct base is completely inaccessible anyway, but it's a bit annoying that we don't detect skipping it.
+//        At least Clang warns about it (regardless of our reflection).
 
 namespace em::Macros::DetectBases
 {
