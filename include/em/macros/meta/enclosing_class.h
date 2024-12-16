@@ -29,7 +29,7 @@ namespace em::detail::Macros::EnclosingClass
 // Declares a typedef named `self_`, pointing to the enclosing class.
 // You can have several of those in a class if the names are different.
 #define EM_TYPEDEF_ENCLOSING_CLASS(self_) \
-    struct EM_CAT(_adl_em_EnclosingClassTag, self_); \
-    constexpr auto _em_detail_EnclosingClassHelper(EM_CAT(_adl_em_EnclosingClassTag, self_)) \
-    -> decltype(void(::em::detail::Macros::EnclosingClass::Write<EM_CAT(_adl_em_EnclosingClassTag, self_), decltype(this)>{})); \
-    using self_ = ::em::detail::Macros::EnclosingClass::Type<EM_CAT(_adl_em_EnclosingClassTag, self_)>;
+    struct EM_CAT(_em_detail_EnclosingClassTag, self_); \
+    constexpr auto _em_detail_EnclosingClassHelper(EM_CAT(_em_detail_EnclosingClassTag, self_)) \
+    -> decltype(void(::em::detail::Macros::EnclosingClass::Write<EM_CAT(_em_detail_EnclosingClassTag, self_), decltype(this)>{})); \
+    using self_ = ::em::detail::Macros::EnclosingClass::Type<EM_CAT(_em_detail_EnclosingClassTag, self_)>;
