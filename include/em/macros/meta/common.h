@@ -35,6 +35,10 @@
 #define EM_VA_FIRST(...) DETAIL_EM_VA_FIRST(__VA_ARGS__)
 #define DETAIL_EM_VA_FIRST(x, ...) x
 
+// If the argument contains a comma, removes it and everything before it.
+#define EM_VA_SKIP_FIRST(...) DETAIIL_EM_VA_SKIP_FIRST(__VA_ARGS__)
+#define DETAIL_EM_VA_SKIP_FIRST(x, ...) __VA_ARGS__
+
 // Returns `m(...)`. You can use this to make sure that deferred commas actually act as argument separators.
 #define EM_CALL(m, ...) m(__VA_ARGS__)
 #define EM_CALL_A(m, ...) m(__VA_ARGS__)

@@ -1,6 +1,10 @@
 #pragma once
 
 #include "em/macros/meta/common.h"
+#include "em/meta/constants.h"
+#include "em/meta/stateful/list.h"
+
+#include <type_traits>
 
 // This file must be used together with `em/meta/detect_bases.h`. That file is in a different repository.
 //

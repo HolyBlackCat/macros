@@ -14,6 +14,10 @@
 #define DETAIL_EM_LIFT_LAMBDA_ATTRS EM_ALWAYS_INLINE_LAMBDA EM_ARTIFICIAL
 #endif
 
+// Lift an expression. Produces a lambda with no arguments.
+#define EM_EXPR(...) \
+    [&]() DETAIL_EM_LIFT_LAMBDA_ATTRS EM_RETURNS(__VA_ARGS__)
+
 // Lift a function. `EM_FUNC(foo)` -> `foo(...)`.
 #define EM_FUNC(...) \
     [](auto &&... _m_params) DETAIL_EM_LIFT_LAMBDA_ATTRS EM_RETURNS(__VA_ARGS__(EM_FWD(_m_params)...))
@@ -37,6 +41,7 @@
 #define EM_BINARY(...) [](auto &&_m_a, auto &&_m_b) DETAIL_EM_LIFT_LAMBDA_ATTRS EM_RETURNS(EM_FWD(_m_a) __VA_ARGS__ EM_FWD(_m_b))
 
 #if EM_ENABLE_SHORT_MACROS(LIFT)
+#define EXPR EM_EXPR
 #define FUNC EM_FUNC
 #define MEMBER EM_MEMBER
 #define MEMBER_FUNC EM_MEMBER_FUNC
