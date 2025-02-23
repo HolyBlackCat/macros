@@ -15,8 +15,9 @@
 #endif
 
 // Lift an expression. Produces a lambda with no arguments.
+// Here we intentionally don't use `EM_RETURNS` to avoid duplication, we don't win anything by being SFINAE-friendly since the lambda itself has no arguments.
 #define EM_EXPR(...) \
-    [&]() DETAIL_EM_LIFT_LAMBDA_ATTRS EM_RETURNS(__VA_ARGS__)
+    [&]() DETAIL_EM_LIFT_LAMBDA_ATTRS -> decltype(auto) {return (__VA_ARGS__);}
 
 // Lift a function. `EM_FUNC(foo)` -> `foo(...)`.
 #define EM_FUNC(...) \
