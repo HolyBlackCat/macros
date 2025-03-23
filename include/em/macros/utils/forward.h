@@ -10,7 +10,8 @@ namespace em::detail::Macros
     using FwdType = T;
 
     template <typename T, typename U> struct FwdTypeEx {using type = T &&;};
-    template <typename T> struct FwdTypeEx<T, T> {using type = T;};
+    template <typename T, typename U> struct FwdTypeEx<T, const U &> {using type = const T &&;}; // When forwarding a non-ref class member in a const member function, don't try to remove constness from it.
+    template <typename T> struct FwdTypeEx<T, T> {using type = T;}; // When forwarding a prvalue, don't materialize it.
 
     template <typename T>
     using FwdNonRefAsConst = std::conditional_t<std::is_reference_v<T>, T, const T &&>;

@@ -40,6 +40,27 @@ static_assert([]{
     return ref;
 }());
 
+struct C
+{
+    A x;
+    A &y = x;
+    A &&z = (A &&)x;
+
+    void foo()
+    {
+        static_assert(std::is_same_v<decltype(EM_FWD_EX(x)), A &&>);
+        static_assert(std::is_same_v<decltype(EM_FWD_EX(y)), A &>);
+        static_assert(std::is_same_v<decltype(EM_FWD_EX(z)), A &&>);
+    }
+
+    void foo() const
+    {
+        static_assert(std::is_same_v<decltype(EM_FWD_EX(x)), const A &&>);
+        static_assert(std::is_same_v<decltype(EM_FWD_EX(y)), A &>);
+        static_assert(std::is_same_v<decltype(EM_FWD_EX(z)), A &&>);
+    }
+};
+
 
 
 // Forward non-reference as const:
