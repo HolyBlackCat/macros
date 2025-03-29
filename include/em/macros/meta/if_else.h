@@ -44,7 +44,7 @@
 
 // Usage: `EM_IF_01(cond)(a)(b)`.
 // `cond` can be either `1` or `0`, then returns `a` or `b` respectively.
-// Other values of `cond` are illegal. `a` and `b` are allowed to contain commas, but `b` isn't.
+// Other values of `cond` are illegal. `a` and `b` are allowed to contain commas, but `cond` isn't.
 #define EM_IF_01(cond) EM_CAT(DETAIL_EM_IF_01_, cond)
 #define DETAIL_EM_IF_01_0(...) DETAIL_EM_IF_ELSE_1
 #define DETAIL_EM_IF_01_1(...) __VA_ARGS__ DETAIL_EM_IF_ELSE_
@@ -61,8 +61,27 @@
 
 // Usage: `EM_TRUTHY_OR_FALLBACK(a)(b)`.
 // If `a` is `1`, `0`, or an empty string, returns that. Otherwise returns `b`.
-// This should be used as a condition for `EM_IF_TRUTHY`. This gives `a` has priority over `b`. If `a` is undefined, then `b` gets used.
+// This should be used as a condition for `EM_IF_TRUTHY`. This gives `a` priority over `b`. If `a` is undefined, then `b` gets used.
 #define EM_TRUTHY_OR_FALLBACK(...) EM_IF_EMPTY(EM_CAT(DETAIL_EM_TRUTHY_OR_FALLBACK_, __VA_ARGS__)())(__VA_ARGS__)
 #define DETAIL_EM_TRUTHY_OR_FALLBACK_()
 #define DETAIL_EM_TRUTHY_OR_FALLBACK_0()
 #define DETAIL_EM_TRUTHY_OR_FALLBACK_1()
+
+// Given `1` or empty string, returns `1`. Otherwise (for `0` or any other string) returns `0`.
+#define EM_IS_TRUTHY(...) EM_IF_TRUTHY(__VA_ARGS__)(1)(0)
+// Same, but negates the result.
+#define EM_IS_FALSEY(...) EM_IF_TRUTHY(__VA_ARGS__)(0)(1)
+
+
+// --- Any common value:
+
+// Usage: `EM_IF_EMPTY_OR_01(cond)(a)(b)`.
+// If `cond` is empty, `0`, or `1`, returns `a`, otherwise `b`.
+// This is intended to check if the macro is defined, as those are the most common values.
+#define EM_IF_EMPTY_OR_01(...) EM_IF_EMPTY(EM_CAT(DETAIL_EM_IF_EMPTY_OR_01_, __VA_ARGS__)())
+#define DETAIL_EM_IF_EMPTY_OR_01_()
+#define DETAIL_EM_IF_EMPTY_OR_01_0()
+#define DETAIL_EM_IF_EMPTY_OR_01_1()
+
+// Returns `1` if `...` is empty, `0`, or `1`. Otherwise returns `0`.
+#define EM_IS_EMPTY_OR_01(...) EM_IF_EMPTY_OR_01(__VA_ARGS__)(1)(0)
