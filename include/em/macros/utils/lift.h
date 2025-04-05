@@ -1,7 +1,7 @@
 #pragma once
 
 #include "em/macros/detail/enable_short_macros.h"
-#include "em/macros/detail/overload.h"
+#include "em/macros/detail/overload.h" // IWYU pragma: keep - we need this for `EM_MEMBER()` below.
 #include "em/macros/portable/always_inline.h"
 #include "em/macros/portable/artificial.h"
 #include "em/macros/utils/forward.h"
