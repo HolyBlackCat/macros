@@ -61,11 +61,11 @@
 //   Currently variables are not expanded inside of the list or the separator, only inside the body.
 
 // `EM_P(...)` inside of eval expands to `(...)`, but allows any macros inside of it to be expanded.
-#define EM_P(...) )(popen)(emit,__VA_ARGS__)(pclose)(emit,
+#define EM_P(...) )(lparen)(emit,__VA_ARGS__)(rparen)(emit,
 // Eval turns this into `(`.
-#define EM_LP )(popen)(emit,
+#define EM_LP )(lparen)(emit,
 // Eval turns this into `)`.
-#define EM_RP )(pclose)(emit,
+#define EM_RP )(rparen)(emit,
 
 // You need this to pass code segments to another macro (assuming they contain any of those macro calls: `EM_P`, `EM_i`, etc.).
 // The first macro in the chain must immediately wrap the code in `(...)`,
@@ -151,8 +151,8 @@
 #define DETAIL_EM_EVAL7(data, code) SF_FOR_EACH7(DETAIL_EM_EVAL_BODY, DETAIL_EM_EVAL_STEP7, SF_NULL, (EM_IDENTITY data), code)
 #define DETAIL_EM_EVAL_BODY(n, d, kind, ...) EM_CAT(DETAIL_EM_EVAL_BODY_,kind)(n, d __VA_OPT__(,) __VA_ARGS__)
 #define DETAIL_EM_EVAL_BODY_emit(n, d, ...) __VA_ARGS__
-#define DETAIL_EM_EVAL_BODY_popen(n, d) (
-#define DETAIL_EM_EVAL_BODY_pclose(n, d) )
+#define DETAIL_EM_EVAL_BODY_lparen(n, d) (
+#define DETAIL_EM_EVAL_BODY_rparen(n, d) )
 #define DETAIL_EM_EVAL_BODY_set(n, d, ...)
 #define DETAIL_EM_EVAL_BODY_var(n, d, index) DETAIL_EM_EVAL_STRIP_PARENS(EM_VA_AT(index, EM_IDENTITY d))
 #define DETAIL_EM_EVAL_BODY_foreach(n, d, i, elems, sep, body) // Everything here is emitted by the step function.
@@ -174,24 +174,24 @@
 #define DETAIL_EM_EVAL_STEP5_emit(n, d, ...) d
 #define DETAIL_EM_EVAL_STEP6_emit(n, d, ...) d
 #define DETAIL_EM_EVAL_STEP7_emit(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP_popen(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP0_popen(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP1_popen(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP2_popen(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP3_popen(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP4_popen(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP5_popen(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP6_popen(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP7_popen(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP_pclose(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP0_pclose(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP1_pclose(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP2_pclose(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP3_pclose(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP4_pclose(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP5_pclose(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP6_pclose(n, d, ...) d
-#define DETAIL_EM_EVAL_STEP7_pclose(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP_lparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP0_lparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP1_lparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP2_lparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP3_lparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP4_lparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP5_lparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP6_lparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP7_lparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP_rparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP0_rparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP1_rparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP2_rparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP3_rparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP4_rparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP5_rparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP6_rparen(n, d, ...) d
+#define DETAIL_EM_EVAL_STEP7_rparen(n, d, ...) d
 #define DETAIL_EM_EVAL_STEP_var(n, d, ...) d
 #define DETAIL_EM_EVAL_STEP0_var(n, d, ...) d
 #define DETAIL_EM_EVAL_STEP1_var(n, d, ...) d
