@@ -5,11 +5,11 @@
 #include "em/macros/meta/optional_parens.h"
 #include "em/macros/meta/sequence_for.h"
 
+// This tech is barely usable because of Clangd lagginess:  https://github.com/clangd/clangd/issues/2347
+
+
 // This is a micro programming language implemented in the preprocessor, which helps write advanced macros.
 //
-// WARNING: Sometimes Clangd can hang when you have syntax errors near the `EM_EVAL(...)` macro call (not necessarily invalid macro syntax,
-//   and not all errors trigger this; one example is adding junk after a complex macro call).
-// Restarting Clangd after fixing the syntax errors unhangs it, or it can unhang by itself after a few minutes.
 // Last tested on Clangd 19.
 //
 // --- BASICS ---
@@ -18,45 +18,45 @@
 //     `EM_EVAL(foo)` expands to `foo`.
 //   There are variables that can be assigned:
 //       EM_EVAL(
-//           EM_SET_A(10)
-//           EM_SET_B(20)
-//           std::cout << EM_A + EM_B << '\n';
+//           EM_EVAL_SET_A(10)
+//           EM_EVAL_SET_B(20)
+//           std::cout << EM_EVAL_A + EM_EVAL_B << '\n';
 //       )
 //   This expands to:
 //       std::cout << 10 + 20 << '\n';
 //
 //   There are only 9 variables: A,B,C,D,E,F,G,H,I.
 //
-//   If `EM_i` or `EM_SET_i` appears inside of parentheses, those parentheses must be preceded by `EM_P`: `std::max EM_P(EM_A, EM_B)` -> `std::max(A, B)`.
-//   This is also needed to invoke macros on variables, e.g. `EM_VA_AT0 EM_P(EM_A)`.
+//   If `EM_i` or `EM_EVAL_SET_i` appears inside of parentheses, those parentheses must be preceded by `EM_P`: `std::max EM_P(EM_EVAL_A, EM_EVAL_B)` -> `std::max(A, B)`.
+//   This is also needed to invoke macros on variables, e.g. `EM_VA_AT0 EM_P(EM_EVAL_A)`.
 //   There are also `EM_LP` and `EM_RP` that expand to `(` and `)` respectively.
 //
-//   `EM_i` variables can appear inside of `EM_SET_i(...)`, e.g. `SET_EM_A( EM_A + EM_B )`.
+//   `EM_i` variables can appear inside of `EM_EVAL_SET_i(...)`, e.g. `SET_EM_EVAL_A( EM_EVAL_A + EM_EVAL_B )`.
 //
-//   We also provide helpers such as `EM_A0` that call `EM_VA_ATi` at the respective variable, and ALSO expand the parentheses if any.
+//   We also provide helpers such as `EM_EVAL_A0` that call `EM_VA_ATi` at the respective variable, and ALSO expand the parentheses if any.
 //
 // --- PASSING CODE AS FUNCTION PARAMETERS ---
 //
 //   If you pass a piece of code with `EM_i`, `EM_P`, etc in it to another macro, the first macro in the chain must immeiately wrap it in `(...)`,
-//     and the last macro in the chain must call `EM_UNWRAP_CODE(...)` on it to turn it back to usable code.
+//     and the last macro in the chain must call `EM_EVAL_UNWRAP_CODE(...)` on it to turn it back to usable code.
 //   See `utils/cvref.h` for an example.
 //
 // --- LOOPS ---
 //
 //   There are foreach loops.
 //       EM_EVAL(
-//           EM_FOREACH_A( (10)(20)(30) )
+//           EM_EVAL_FOREACH_A( (10)(20)(30) )
 //           (
-//               std::cout << EM_A << '\n';
+//               std::cout << EM_EVAL_A << '\n';
 //           )
 //       )
 //   Expands:
-//       std::cout << EM_A << '\n';
-//       std::cout << EM_B << '\n';
-//       std::cout << EM_C << '\n';
-//   A separate `EM_FOREACH_i` macro is provided for each variable. Loops can be nested (normally you'd use different variables, but the same variable works too).
+//       std::cout << EM_EVAL_A << '\n';
+//       std::cout << EM_EVAL_B << '\n';
+//       std::cout << EM_EVAL_C << '\n';
+//   A separate `EM_EVAL_FOREACH_i` macro is provided for each variable. Loops can be nested (normally you'd use different variables, but the same variable works too).
 //
-//   Loops can have separators: `EM_FOREACH_A( (10)(20)(30), (,) )( body )`. The parentheses around the separator are optional.
+//   Loops can have separators: `EM_EVAL_FOREACH_A( (10)(20)(30), (,) )( body )`. The parentheses around the separator are optional.
 //
 //   Currently variables are not expanded inside of the list or the separator, only inside the body.
 
@@ -70,73 +70,73 @@
 // You need this to pass code segments to another macro (assuming they contain any of those macro calls: `EM_P`, `EM_i`, etc.).
 // The first macro in the chain must immediately wrap the code in `(...)`,
 //   then the macro calling eval must call this to unwrap the code back to a usable state.
-// In the simplest case you'll do it in the same macro: `EM_UNWRAP_CODE(( __VA_ARGS__ ))`.
-#define EM_UNWRAP_CODE(code_) ) DETAIL_EM_UNWRAP_CODE code_ (emit,
-#define DETAIL_EM_UNWRAP_CODE(...) (emit, __VA_ARGS__)
+// In the simplest case you'll do it in the same macro: `EM_EVAL_UNWRAP_CODE(( __VA_ARGS__ ))`.
+#define EM_EVAL_UNWRAP_CODE(code_) ) DETAIL_EM_EVAL_UNWRAP_CODE code_ (emit,
+#define DETAIL_EM_EVAL_UNWRAP_CODE(...) (emit, __VA_ARGS__)
 
-#define EM_A )(var,0)(emit,
-#define EM_B )(var,1)(emit,
-#define EM_C )(var,2)(emit,
-#define EM_D )(var,3)(emit,
-#define EM_E )(var,4)(emit,
-#define EM_F )(var,5)(emit,
-#define EM_G )(var,6)(emit,
-#define EM_H )(var,7)(emit,
-#define EM_I )(var,8)(emit,
+#define EM_EVAL_A )(var,0)(emit,
+#define EM_EVAL_B )(var,1)(emit,
+#define EM_EVAL_C )(var,2)(emit,
+#define EM_EVAL_D )(var,3)(emit,
+#define EM_EVAL_E )(var,4)(emit,
+#define EM_EVAL_F )(var,5)(emit,
+#define EM_EVAL_G )(var,6)(emit,
+#define EM_EVAL_H )(var,7)(emit,
+#define EM_EVAL_I )(var,8)(emit,
 
 // Indexed access helpers for variables.
-#define EM_A0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_A))
-#define EM_B0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_B))
-#define EM_C0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_C))
-#define EM_D0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_D))
-#define EM_E0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_E))
-#define EM_F0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_F))
-#define EM_G0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_G))
-#define EM_H0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_H))
-#define EM_I0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_I))
+#define EM_EVAL_A0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_A))
+#define EM_EVAL_B0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_B))
+#define EM_EVAL_C0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_C))
+#define EM_EVAL_D0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_D))
+#define EM_EVAL_E0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_E))
+#define EM_EVAL_F0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_F))
+#define EM_EVAL_G0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_G))
+#define EM_EVAL_H0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_H))
+#define EM_EVAL_I0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_I))
 
-#define EM_A1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_A))
-#define EM_B1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_B))
-#define EM_C1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_C))
-#define EM_D1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_D))
-#define EM_E1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_E))
-#define EM_F1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_F))
-#define EM_G1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_G))
-#define EM_H1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_H))
-#define EM_I1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_I))
+#define EM_EVAL_A1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_A))
+#define EM_EVAL_B1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_B))
+#define EM_EVAL_C1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_C))
+#define EM_EVAL_D1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_D))
+#define EM_EVAL_E1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_E))
+#define EM_EVAL_F1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_F))
+#define EM_EVAL_G1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_G))
+#define EM_EVAL_H1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_H))
+#define EM_EVAL_I1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_I))
 
-#define EM_A2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_A))
-#define EM_B2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_B))
-#define EM_C2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_C))
-#define EM_D2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_D))
-#define EM_E2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_E))
-#define EM_F2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_F))
-#define EM_G2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_G))
-#define EM_H2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_H))
-#define EM_I2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_I))
+#define EM_EVAL_A2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_A))
+#define EM_EVAL_B2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_B))
+#define EM_EVAL_C2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_C))
+#define EM_EVAL_D2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_D))
+#define EM_EVAL_E2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_E))
+#define EM_EVAL_F2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_F))
+#define EM_EVAL_G2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_G))
+#define EM_EVAL_H2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_H))
+#define EM_EVAL_I2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_I))
 
 // Variable setters:
-#define EM_SET_A(...) )(set,0,(emit,__VA_ARGS__))(emit,
-#define EM_SET_B(...) )(set,1,(emit,__VA_ARGS__))(emit,
-#define EM_SET_C(...) )(set,2,(emit,__VA_ARGS__))(emit,
-#define EM_SET_D(...) )(set,3,(emit,__VA_ARGS__))(emit,
-#define EM_SET_E(...) )(set,4,(emit,__VA_ARGS__))(emit,
-#define EM_SET_F(...) )(set,5,(emit,__VA_ARGS__))(emit,
-#define EM_SET_G(...) )(set,6,(emit,__VA_ARGS__))(emit,
-#define EM_SET_H(...) )(set,7,(emit,__VA_ARGS__))(emit,
-#define EM_SET_I(...) )(set,8,(emit,__VA_ARGS__))(emit,
+#define EM_EVAL_SET_A(...) )(set,0,(emit,__VA_ARGS__))(emit,
+#define EM_EVAL_SET_B(...) )(set,1,(emit,__VA_ARGS__))(emit,
+#define EM_EVAL_SET_C(...) )(set,2,(emit,__VA_ARGS__))(emit,
+#define EM_EVAL_SET_D(...) )(set,3,(emit,__VA_ARGS__))(emit,
+#define EM_EVAL_SET_E(...) )(set,4,(emit,__VA_ARGS__))(emit,
+#define EM_EVAL_SET_F(...) )(set,5,(emit,__VA_ARGS__))(emit,
+#define EM_EVAL_SET_G(...) )(set,6,(emit,__VA_ARGS__))(emit,
+#define EM_EVAL_SET_H(...) )(set,7,(emit,__VA_ARGS__))(emit,
+#define EM_EVAL_SET_I(...) )(set,8,(emit,__VA_ARGS__))(emit,
 
 // Foreach loops:
-#define EM_FOREACH_A(seq, ...) )(foreach,0,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
-#define EM_FOREACH_B(seq, ...) )(foreach,1,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
-#define EM_FOREACH_C(seq, ...) )(foreach,2,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
-#define EM_FOREACH_D(seq, ...) )(foreach,3,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
-#define EM_FOREACH_E(seq, ...) )(foreach,4,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
-#define EM_FOREACH_F(seq, ...) )(foreach,5,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
-#define EM_FOREACH_G(seq, ...) )(foreach,6,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
-#define EM_FOREACH_H(seq, ...) )(foreach,7,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
-#define EM_FOREACH_I(seq, ...) )(foreach,8,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_FOREACH
-#define DETAIL_EM_FOREACH(...) (emit,__VA_ARGS__))(emit,
+#define EM_EVAL_FOREACH_A(seq, ...) )(foreach,0,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_EVAL_FOREACH
+#define EM_EVAL_FOREACH_B(seq, ...) )(foreach,1,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_EVAL_FOREACH
+#define EM_EVAL_FOREACH_C(seq, ...) )(foreach,2,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_EVAL_FOREACH
+#define EM_EVAL_FOREACH_D(seq, ...) )(foreach,3,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_EVAL_FOREACH
+#define EM_EVAL_FOREACH_E(seq, ...) )(foreach,4,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_EVAL_FOREACH
+#define EM_EVAL_FOREACH_F(seq, ...) )(foreach,5,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_EVAL_FOREACH
+#define EM_EVAL_FOREACH_G(seq, ...) )(foreach,6,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_EVAL_FOREACH
+#define EM_EVAL_FOREACH_H(seq, ...) )(foreach,7,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_EVAL_FOREACH
+#define EM_EVAL_FOREACH_I(seq, ...) )(foreach,8,(seq),(EM_TRY_EXPAND_PARENS(__VA_ARGS__)),DETAIL_EM_EVAL_FOREACH
+#define DETAIL_EM_EVAL_FOREACH(...) (emit,__VA_ARGS__))(emit,
 
 #define EM_EVAL(...) DETAIL_EM_EVAL(((/*A*/),(/*B*/),(/*C*/),(/*D*/),(/*E*/),(/*F*/),(/*G*/),(/*H*/),(/*I*/)), (emit,__VA_ARGS__))
 // Can't have `n` as the parameter, it breaks recursion.
