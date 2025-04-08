@@ -2,8 +2,7 @@
 
 #include "em/macros/detail/enable_short_macros.h"
 #include "em/macros/detail/overload.h" // IWYU pragma: keep - we need this for `EM_MEMBER()` below.
-#include "em/macros/portable/always_inline.h"
-#include "em/macros/portable/artificial.h"
+#include "em/macros/portable/tiny_func.h"
 #include "em/macros/utils/forward.h"
 #include "em/macros/utils/returns.h"
 
@@ -11,7 +10,7 @@
 // converting them to lambdas that can be easily passed around.
 
 #ifndef DETAIL_EM_LIFT_LAMBDA_ATTRS
-#define DETAIL_EM_LIFT_LAMBDA_ATTRS EM_ALWAYS_INLINE_LAMBDA EM_ARTIFICIAL
+#define DETAIL_EM_LIFT_LAMBDA_ATTRS EM_TINY_LAMBDA
 #endif
 
 // Lift an expression. Produces a lambda with no arguments.
