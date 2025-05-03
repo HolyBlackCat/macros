@@ -16,7 +16,7 @@
 
 // An alternative version that doesn't choke when used for class member functions that are themselves NOT templated,
 //   and need to be SFINAE-disabled for some template arguments of the enclosing class.
-// I'm not entirely sure why compilers don't choke on `noexcept` here (I tested the big three) while at the same choking when
+// I'm not entirely sure why compilers don't choke on `noexcept` here (I tested the big three) while at the same time choking when
 //   trying to `decltype()` the return type like in `EM_RETURNS()`.
 // Need the `(...)` after `return` here (but in `EM_RETURNS(...)` they don't matter).
 #define EM_SOFT_RETURNS(...) \
