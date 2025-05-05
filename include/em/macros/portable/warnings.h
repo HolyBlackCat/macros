@@ -47,3 +47,13 @@
 #define EM_WARNING_ID_NON_TEMPLATE_FRIEND
 #endif
 #define EM_SILENCE_NON_TEMPLATE_FRIEND EM_SILENCE_DIAGNOSTIC(EM_WARNING_ID_NON_TEMPLATE_FRIEND)
+
+// This warns about ignored attributes. In particular, `[[nodiscard]]` on void functions.
+#if EM_IS_CLANG_LIKE
+#define EM_WARNING_ID_UNUSED_ATTRIBUTE "-Wignored-attributes"
+#elif EM_IS_GCC_LIKE
+#define EM_WARNING_ID_UNUSED_ATTRIBUTE "-Wattributes"
+#else
+#define EM_WARNING_ID_UNUSED_ATTRIBUTE
+#endif
+#define EM_SILENCE_UNUSED_ATTRIBUTE EM_SILENCE_DIAGNOSTIC(EM_WARNING_ID_UNUSED_ATTRIBUTE)
