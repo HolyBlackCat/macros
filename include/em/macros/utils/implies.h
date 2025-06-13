@@ -8,7 +8,7 @@ namespace em::detail::Macros
     struct Implies
     {
         template <BoolLike T>
-        friend constexpr bool operator||(T &&lhs, Implies)
+        friend constexpr bool operator|(T &&lhs, Implies)
         {
             return !bool((T &&)lhs);
         }
@@ -19,9 +19,8 @@ namespace em::detail::Macros
 //
 // Similar to `a <= b`, except converts both operands to `bool` and short-circuits (if lhs is false, the rhs is not evaluated).
 //
-// Has same precedence as `||`, which is lower than everything other than `? :` and assignment, and equal to only other `||`.
-// Can have strange precedence next to `||`, e.g. `a || b EM_IMPLIES c || d` is parsed as `((a || b) EM_IMPLIES c) || d`.
-//
-// On Clang this doesn't work in concepts and requires-clauses, there it must be wrapped in `bool(...)`.
-// Otherwise Clang complains that `atomic constraint must be of type 'bool' (found '::detail::Implies')`.
-#define EM_IMPLIES ||::em::detail::Macros::Implies{}||
+// Has some weird precedence. `A || B  EM_IMPLIES  C || D` parses as `A || (B EM_IMPLIES C || D)`, and similary with `&&`.
+// Note that in the implementation, the left operator has to be `|`, because Clang chokes on overloaded `&&` and `||` in requires-clauses and concepts,
+//   and `|` is the next best thing. It has the lowest precedence higher than `&&` and `||`.
+// And the second operator has to stay `||` for short-circuiting reasons, and to work in concepts and requires-clauses.
+#define EM_IMPLIES |::em::detail::Macros::Implies{}||
