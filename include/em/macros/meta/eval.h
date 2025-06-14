@@ -27,9 +27,9 @@
 //
 //   There are only 9 variables: A,B,C,D,E,F,G,H,I.
 //
-//   If `EM_i` or `EM_EVAL_SET_i` appears inside of parentheses, those parentheses must be preceded by `EM_P`: `std::max EM_P(EM_EVAL_A, EM_EVAL_B)` -> `std::max(A, B)`.
-//   This is also needed to invoke macros on variables, e.g. `EM_VA_AT0 EM_P(EM_EVAL_A)`.
-//   There are also `EM_LP` and `EM_RP` that expand to `(` and `)` respectively.
+//   If `EM_i` or `EM_EVAL_SET_i` appears inside of parentheses, those parentheses must be preceded by `EM_EVAL_P`: `std::max EM_EVAL_P(EM_EVAL_A, EM_EVAL_B)` -> `std::max(A, B)`.
+//   This is also needed to invoke macros on variables, e.g. `EM_VA_AT0 EM_EVAL_P(EM_EVAL_A)`.
+//   There are also `EM_EVAL_LP` and `EM_EVAL_RP` that expand to `(` and `)` respectively.
 //
 //   `EM_i` variables can appear inside of `EM_EVAL_SET_i(...)`, e.g. `SET_EM_EVAL_A( EM_EVAL_A + EM_EVAL_B )`.
 //
@@ -37,9 +37,9 @@
 //
 // --- PASSING CODE AS FUNCTION PARAMETERS ---
 //
-//   If you pass a piece of code with `EM_i`, `EM_P`, etc in it to another macro, the first macro in the chain must immeiately wrap it in `(...)`,
+//   If you pass a piece of code with `EM_i`, `EM_EVAL_P`, etc in it to another macro, the first macro in the chain must immeiately wrap it in `(...)`,
 //     and the last macro in the chain must call `EM_EVAL_UNWRAP_CODE(...)` on it to turn it back to usable code.
-//   See `utils/cvref.h` for an example.
+//   In the simplest case that would happen in the very same macro: `EM_EVAL_UNWRAP_CODE(__VA_ARGS__)`.
 //
 // --- LOOPS ---
 //
@@ -60,14 +60,14 @@
 //
 //   Currently variables are not expanded inside of the list or the separator, only inside the body.
 
-// `EM_P(...)` inside of eval expands to `(...)`, but allows any macros inside of it to be expanded.
-#define EM_P(...) )(lparen)(emit,__VA_ARGS__)(rparen)(emit,
+// `EM_EVAL_P(...)` inside of eval expands to `(...)`, but allows any macros inside of it to be expanded.
+#define EM_EVAL_P(...) )(lparen)(emit,__VA_ARGS__)(rparen)(emit,
 // Eval turns this into `(`.
-#define EM_LP )(lparen)(emit,
+#define EM_EVAL_LP )(lparen)(emit,
 // Eval turns this into `)`.
-#define EM_RP )(rparen)(emit,
+#define EM_EVAL_RP )(rparen)(emit,
 
-// You need this to pass code segments to another macro (assuming they contain any of those macro calls: `EM_P`, `EM_i`, etc.).
+// You need this to pass code segments to another macro (assuming they contain any of those macro calls: `EM_EVAL_P`, `EM_i`, etc.).
 // The first macro in the chain must immediately wrap the code in `(...)`,
 //   then the macro calling eval must call this to unwrap the code back to a usable state.
 // In the simplest case you'll do it in the same macro: `EM_EVAL_UNWRAP_CODE(( __VA_ARGS__ ))`.
@@ -85,35 +85,35 @@
 #define EM_EVAL_I )(var,8)(emit,
 
 // Indexed access helpers for variables.
-#define EM_EVAL_A0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_A))
-#define EM_EVAL_B0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_B))
-#define EM_EVAL_C0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_C))
-#define EM_EVAL_D0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_D))
-#define EM_EVAL_E0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_E))
-#define EM_EVAL_F0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_F))
-#define EM_EVAL_G0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_G))
-#define EM_EVAL_H0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_H))
-#define EM_EVAL_I0 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT0 EM_P(EM_EVAL_I))
+#define EM_EVAL_A0 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT0 EM_EVAL_P(EM_EVAL_A))
+#define EM_EVAL_B0 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT0 EM_EVAL_P(EM_EVAL_B))
+#define EM_EVAL_C0 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT0 EM_EVAL_P(EM_EVAL_C))
+#define EM_EVAL_D0 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT0 EM_EVAL_P(EM_EVAL_D))
+#define EM_EVAL_E0 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT0 EM_EVAL_P(EM_EVAL_E))
+#define EM_EVAL_F0 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT0 EM_EVAL_P(EM_EVAL_F))
+#define EM_EVAL_G0 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT0 EM_EVAL_P(EM_EVAL_G))
+#define EM_EVAL_H0 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT0 EM_EVAL_P(EM_EVAL_H))
+#define EM_EVAL_I0 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT0 EM_EVAL_P(EM_EVAL_I))
 
-#define EM_EVAL_A1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_A))
-#define EM_EVAL_B1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_B))
-#define EM_EVAL_C1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_C))
-#define EM_EVAL_D1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_D))
-#define EM_EVAL_E1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_E))
-#define EM_EVAL_F1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_F))
-#define EM_EVAL_G1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_G))
-#define EM_EVAL_H1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_H))
-#define EM_EVAL_I1 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT1 EM_P(EM_EVAL_I))
+#define EM_EVAL_A1 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT1 EM_EVAL_P(EM_EVAL_A))
+#define EM_EVAL_B1 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT1 EM_EVAL_P(EM_EVAL_B))
+#define EM_EVAL_C1 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT1 EM_EVAL_P(EM_EVAL_C))
+#define EM_EVAL_D1 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT1 EM_EVAL_P(EM_EVAL_D))
+#define EM_EVAL_E1 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT1 EM_EVAL_P(EM_EVAL_E))
+#define EM_EVAL_F1 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT1 EM_EVAL_P(EM_EVAL_F))
+#define EM_EVAL_G1 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT1 EM_EVAL_P(EM_EVAL_G))
+#define EM_EVAL_H1 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT1 EM_EVAL_P(EM_EVAL_H))
+#define EM_EVAL_I1 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT1 EM_EVAL_P(EM_EVAL_I))
 
-#define EM_EVAL_A2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_A))
-#define EM_EVAL_B2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_B))
-#define EM_EVAL_C2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_C))
-#define EM_EVAL_D2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_D))
-#define EM_EVAL_E2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_E))
-#define EM_EVAL_F2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_F))
-#define EM_EVAL_G2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_G))
-#define EM_EVAL_H2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_H))
-#define EM_EVAL_I2 EM_TRY_EXPAND_PARENS EM_P(EM_VA_AT2 EM_P(EM_EVAL_I))
+#define EM_EVAL_A2 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT2 EM_EVAL_P(EM_EVAL_A))
+#define EM_EVAL_B2 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT2 EM_EVAL_P(EM_EVAL_B))
+#define EM_EVAL_C2 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT2 EM_EVAL_P(EM_EVAL_C))
+#define EM_EVAL_D2 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT2 EM_EVAL_P(EM_EVAL_D))
+#define EM_EVAL_E2 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT2 EM_EVAL_P(EM_EVAL_E))
+#define EM_EVAL_F2 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT2 EM_EVAL_P(EM_EVAL_F))
+#define EM_EVAL_G2 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT2 EM_EVAL_P(EM_EVAL_G))
+#define EM_EVAL_H2 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT2 EM_EVAL_P(EM_EVAL_H))
+#define EM_EVAL_I2 EM_TRY_EXPAND_PARENS EM_EVAL_P(EM_VA_AT2 EM_EVAL_P(EM_EVAL_I))
 
 // Variable setters:
 #define EM_EVAL_SET_A(...) )(set,0,(emit,__VA_ARGS__))(emit,
