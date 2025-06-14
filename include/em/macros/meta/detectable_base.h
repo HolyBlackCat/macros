@@ -1,10 +1,11 @@
 #pragma once
 
 #include "em/macros/meta/common.h"
-#include "em/meta/constants.h"
-#include "em/meta/stateful/list.h"
+#include "em/meta/common.h" // IWYU pragma: keep, for `always_false` in the macro.
+#include "em/meta/stateful/list.h" // IWYU pragma: keep, used in the macor.
 
-#include <type_traits>
+#include <cstddef> // IWYU pragma: keep, for `std::nullptr_t` in the macro.
+#include <type_traits> // IWYU pragma: keep, for `std::is_same_v` in the macro.
 
 // This file must be used together with `em/meta/detect_bases.h`. That file is in a different repository.
 //
