@@ -11,7 +11,7 @@ struct A
     )
 };
 
-static void foo()
+void foo()
 {
     EM_EVAL(
         EM_EVAL_SET_A(0)
