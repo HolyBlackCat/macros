@@ -11,6 +11,10 @@
 #define DETAIL_EM_SEQ_FIRST(...) __VA_ARGS__ EM_EMPTY(
 
 
+// If `...` is empty, returns empty. Otherwise it must be parenthesized, and we remove parentheses.
+#define EM_EXPAND_PARENS_OR_NOTHING(...) __VA_OPT__(EM_IDENTITY __VA_ARGS__)
+
+
 // If `...` starts with `(...)`, expands them, i.e. `(a)b` -> `a b`. Otherwise leaves the argument unchanged.
 #define EM_TRY_EXPAND_PARENS(...) DETAIL_EM_TRY_EXPAND_PARENS(DETAIL_EM_TRY_EXPAND_PARENS_IDENTITY __VA_ARGS__)
 #define DETAIL_EM_TRY_EXPAND_PARENS_IDENTITY(...) DETAIL_EM_TRY_EXPAND_PARENS_EXPANDED __VA_ARGS__
