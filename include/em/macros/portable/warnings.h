@@ -1,6 +1,7 @@
 #pragma once
 
 #include "em/macros/meta/common.h"
+#include "em/macros/meta/if_else.h"
 #include "em/macros/platform/compiler.h"
 
 // Wrap the pragmas.
@@ -23,6 +24,10 @@
 #define EM_SILENCE_DIAGNOSTIC(...) __VA_OPT__(EM_DIAGNOSTICS_PUSH EM_DIAGNOSTICS_IGNORE(__VA_ARGS__)) EM_CAT(DETAIL_EM_SILENCE_DIAGNOSTIC_, __VA_OPT__(1))
 #define DETAIL_EM_SILENCE_DIAGNOSTIC_(...) __VA_ARGS__
 #define DETAIL_EM_SILENCE_DIAGNOSTIC_1(...) __VA_ARGS__ EM_DIAGNOSTICS_POP
+
+// This applies conditionally, and is designed to work with the compiler detection macros from `em/macros/platform/compiler.h`.
+// Note, using `EM_IDENTITY` to properly expand what is essentially nested `if`s.
+#define EM_SILENCE_DIAGNOSTIC_IF(cond_, ...) EM_IDENTITY(EM_IF_01(cond_)(EM_SILENCE_DIAGNOSTIC(__VA_ARGS__))(EM_IDENTITY))
 
 
 // --- Predefined warning IDs:
