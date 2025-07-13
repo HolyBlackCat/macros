@@ -1,6 +1,6 @@
 #pragma once
 
-#include <type_traits>
+#include <type_traits> // IWYU pragma: keep, needed in the macros below.
 
 #include "em/macros/portable/always_inline.h"
 
