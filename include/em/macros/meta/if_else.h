@@ -3,6 +3,8 @@
 #include "em/macros/meta/common.h"
 
 // Various conditional macros.
+// The syntax style used here, which is `MACRO(cond)(a)(b)`, can cause problems when used inside of more complex macros.
+// If this happens, we'll probably have to create alternative versions with worse syntax. (I'd keep both? Not sure.)
 
 
 // --- Emptiness:
