@@ -6,11 +6,9 @@
 #include "em/macros/meta/sequence_for.h"
 
 // This tech is barely usable because of Clangd lagginess:  https://github.com/clangd/clangd/issues/2347
-
+// Last tested on Clangd 19.
 
 // This is a micro programming language implemented in the preprocessor, which helps write advanced macros.
-//
-// Last tested on Clangd 19.
 //
 // --- BASICS ---
 //
@@ -27,17 +25,17 @@
 //
 //   There are only 9 variables: A,B,C,D,E,F,G,H,I.
 //
-//   If `EM_i` or `EM_EVAL_SET_i` appears inside of parentheses, those parentheses must be preceded by `EM_EVAL_P`: `std::max EM_EVAL_P(EM_EVAL_A, EM_EVAL_B)` -> `std::max(A, B)`.
+//   If `EM_EVAL_i` or `EM_EVAL_SET_i` appears inside of parentheses, those parentheses must be preceded by `EM_EVAL_P`: `std::max EM_EVAL_P(EM_EVAL_A, EM_EVAL_B)` -> `std::max(A, B)`.
 //   This is also needed to invoke macros on variables, e.g. `EM_VA_AT0 EM_EVAL_P(EM_EVAL_A)`.
 //   There are also `EM_EVAL_LP` and `EM_EVAL_RP` that expand to `(` and `)` respectively.
 //
-//   `EM_i` variables can appear inside of `EM_EVAL_SET_i(...)`, e.g. `SET_EM_EVAL_A( EM_EVAL_A + EM_EVAL_B )`.
+//   `EM_EVAL_i` variables can appear inside of `EM_EVAL_SET_i(...)`, e.g. `SET_EM_EVAL_A( EM_EVAL_A + EM_EVAL_B )`.
 //
 //   We also provide helpers such as `EM_EVAL_A0` that call `EM_VA_ATi` at the respective variable, and ALSO expand the parentheses if any.
 //
 // --- PASSING CODE AS FUNCTION PARAMETERS ---
 //
-//   If you pass a piece of code with `EM_i`, `EM_EVAL_P`, etc in it to another macro, the first macro in the chain must immeiately wrap it in `(...)`,
+//   If you pass a piece of code with `EM_EVAL_i`, `EM_EVAL_P`, etc in it to another macro, the first macro in the chain must immeiately wrap it in `(...)`,
 //     and the last macro in the chain must call `EM_EVAL_UNWRAP_CODE(...)` on it to turn it back to usable code.
 //   In the simplest case that would happen in the very same macro: `EM_EVAL_UNWRAP_CODE(__VA_ARGS__)`.
 //
@@ -67,7 +65,7 @@
 // Eval turns this into `)`.
 #define EM_EVAL_RP )(rparen)(emit,
 
-// You need this to pass code segments to another macro (assuming they contain any of those macro calls: `EM_EVAL_P`, `EM_i`, etc.).
+// You need this to pass code segments to another macro (assuming they contain any of those macro calls: `EM_EVAL_P`, `EM_EVAL_i`, etc.).
 // The first macro in the chain must immediately wrap the code in `(...)`,
 //   then the macro calling eval must call this to unwrap the code back to a usable state.
 // In the simplest case you'll do it in the same macro: `EM_EVAL_UNWRAP_CODE(( __VA_ARGS__ ))`.
