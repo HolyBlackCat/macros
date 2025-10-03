@@ -62,3 +62,13 @@
 #define EM_WARNING_ID_UNUSED_ATTRIBUTE
 #endif
 #define EM_SILENCE_UNUSED_ATTRIBUTE EM_SILENCE_DIAGNOSTIC(EM_WARNING_ID_UNUSED_ATTRIBUTE)
+
+// This warns about inaccessible bases. Those bases sometimes come up e.g. when testing reflection.
+#if EM_IS_ACTUAL_MSVC
+#define EM_WARNING_ID_INACCESSIBLE_BASE 4584 // 'C': base-class 'A' is already a base-class of 'B'
+#elif EM_IS_GCC_LIKE
+#define EM_WARNING_ID_INACCESSIBLE_BASE "-Winaccessible-base"
+#else
+#define EM_WARNING_ID_INACCESSIBLE_BASE
+#endif
+#define EM_SILENCE_INACCESSIBLE_BASE EM_SILENCE_DIAGNOSTIC(EM_WARNING_ID_INACCESSIBLE_BASE)
