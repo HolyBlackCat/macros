@@ -1,9 +1,7 @@
 #pragma once
 
-#pragma once
-
 #include "em/macros/meta/indexing.h"
-#include "em/macros/meta/codegen.h" // Only for the helper macros.
+#include "em/macros/meta/codegen.h" // IWYU pragma: keep. Only for the helper macros.
 
 // Those macros generate cv and/or ref-qualified versions of functions.
 //
