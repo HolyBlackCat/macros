@@ -28,6 +28,10 @@
 #define DETAIL_EM_CAT3(x, y, z) x##y##z
 #define DETAIL_EM_CAT4(x, y, z, w) x##y##z##w
 
+// A version of `EM_CAT` with the variadic last argument.
+#define EM_VCAT(x, ...) DETAIL_EM_VCAT(x, __VA_ARGS__)
+#define DETAIL_EM_VCAT(x, ...) x##__VA_ARGS__
+
 // Appends `_END` to the end of `...`. This helps writing a certain kind of preprocessor loops.
 #define EM_END(...) DETAIL_EM_END(__VA_ARGS__)
 #define DETAIL_EM_END(...) __VA_ARGS__##_END
