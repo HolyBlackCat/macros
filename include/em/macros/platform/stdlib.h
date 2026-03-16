@@ -14,7 +14,7 @@
 //   EM_IS_LIBSTDCXX, EM_IS_LIBCPP, EM_IS_MSVC_STL, EM_IS_CPP_STDLIB_MISSING (all can be false if the C++ standard library exists but is unknown).
 //
 // Version numbers:
-//   EM_CPP_STDLIB_VERSION - libstdc++: major version; libc++: 6 digits: 2 major, 2 minor, 2 patch; MSVC STL: 3 digits (14x)
+//   EM_CPP_STDLIB_VERSION - libstdc++: major version; libc++: 6 digits: 2 major (or 1 in single-digit versions), 2 minor (or 1 digit in v15 and older), 2 patch; MSVC STL: 3 digits (14x)
 //   EM_CPP_STDLIB_DATE - libstdc++: YYYYmmDD; MSVC STL: YYYYmm (then 'L'), libc++: 0
 //
 // Version number checks:
@@ -52,7 +52,11 @@
 #  define EM_CPP_STDLIB_DATE 0
 #  define EM_STRING_CPP_STDLIB_VERSION EM_STR(EM_CPP_STDLIB_VERSION)
 #  define EM_STRING_CPP_STDLIB_DATE ""
-#  define EM_IS_LIBCPP_VERSION(...) EM_COMPARE_VERSION3(100, 100, EM_CPP_STDLIB_VERSION, __VA_ARGS__)
+#  if _LIBCPP_VERSION >= 160000 // In 15.x and earlier, the format was `XXyZZ` instead of `XXyyZZ`.
+#    define EM_IS_LIBCPP_VERSION(...) EM_COMPARE_VERSION3(100, 100, EM_CPP_STDLIB_VERSION, __VA_ARGS__)
+#  else
+#    define EM_IS_LIBCPP_VERSION(...) EM_COMPARE_VERSION3(10, 100, EM_CPP_STDLIB_VERSION, __VA_ARGS__)
+#  endif
 #elif defined(_MSVC_STL_VERSION)
 #  define EM_IS_MSVC_STL 1
 #  define EM_STRING_CPP_STDLIB "MSVC STL"
