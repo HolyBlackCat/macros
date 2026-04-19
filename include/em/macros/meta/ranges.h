@@ -19,3 +19,14 @@
 // `f` would usually be a macro that we expand immediately.
 #define EM_SEQ_MAP(f, seq) SF_FOR_EACH(DETAIL_EM_SEQ_MAP_STEP, SF_STATE, SF_NULL, f, seq)
 #define DETAIL_EM_SEQ_MAP_STEP(n, d, ...) (d(__VA_ARGS__))
+
+// Given sequence `(a)(b)(c)`, returns `c`.
+// For empty sequences, returns empty.
+#define EM_SEQ_LAST(seq) SF_FOR_EACH(SF_NULL, DETAIL_EM_SEQ_LAST_STEP, DETAIL_EM_SEQ_LAST_FINAL,, seq)
+#define DETAIL_EM_SEQ_LAST_STEP(n, d, ...) (__VA_ARGS__)
+#define DETAIL_EM_SEQ_LAST_FINAL(n, d) EM_IDENTITY d
+
+// Given sequence `(a)(b)(c)`, returns `(a)(b)`.
+// For sequences with 1 or 0 elements, returns empty.
+#define EM_SEQ_DROP_LAST(seq) SF_FOR_EACH(SF_NULL, DETAIL_EM_SEQ_DROP_LAST_STEP, SF_NULL,, seq)
+#define DETAIL_EM_SEQ_DROP_LAST_STEP(n, d, ...) (__VA_ARGS__), d
