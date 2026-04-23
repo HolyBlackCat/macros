@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstddef> // IWYU pragma: keep
-#include <type_traits> // IWYU pragma: keep
+#include <cstddef> // IWYU pragma: keep.
+#include <type_traits> // IWYU pragma: keep.
 
 // Check if the expression is truthy.
 // This isn't just `EM_CHECK(...)` to avoid conflicts with our testing framework.
