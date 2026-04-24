@@ -52,8 +52,4 @@
 #define EM_CALL_D(m, ...) m(__VA_ARGS__)
 
 // Some constants.
-#define EM_COMMA(...) ,
-#define EM_LPAREN(...) (
-#define EM_RPAREN(...) )
-#define EM_SYMBOL_AND(...) &&
-#define EM_SYMBOL_OR(...) ||
+#define EM_LPAREN (
