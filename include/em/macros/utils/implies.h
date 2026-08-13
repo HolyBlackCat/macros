@@ -1,5 +1,7 @@
 #pragma once
 
+#include "em/macros/portable/warnings.h"
+
 namespace em::detail::Macros
 {
     template <typename T>
@@ -23,4 +25,4 @@ namespace em::detail::Macros
 // Note that in the implementation, the left operator has to be `|`, because Clang chokes on overloaded `&&` and `||` in requires-clauses and concepts,
 //   and `|` is the next best thing. It has the lowest precedence higher than `&&` and `||`.
 // And the second operator has to stay `||` for short-circuiting reasons, and to work in concepts and requires-clauses.
-#define EM_IMPLIES |::em::detail::Macros::Implies{}||
+#define EM_IMPLIES EM_SILENCE_PARENTHESES( | ::em::detail::Macros::Implies{} || )

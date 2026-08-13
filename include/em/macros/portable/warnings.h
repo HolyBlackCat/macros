@@ -72,3 +72,13 @@
 #define EM_WARNING_ID_INACCESSIBLE_BASE
 #endif
 #define EM_SILENCE_INACCESSIBLE_BASE EM_SILENCE_DIAGNOSTIC(EM_WARNING_ID_INACCESSIBLE_BASE)
+
+// This warns about suspicious lack of parentheses.
+#if EM_IS_GCC_LIKE || EM_IS_CLANG_LIKE
+#define EM_WARNING_ID_PARENTHESES "-Wparentheses"
+#elif EM_IS_MSVC_LIKE
+#define EM_WARNING_ID_PARENTHESES 4554 // '|': check operator precedence for possible error; use parentheses to clarify precedence
+#else
+#define EM_WARNING_ID_PARENTHESES
+#endif
+#define EM_SILENCE_PARENTHESES EM_SILENCE_DIAGNOSTIC(EM_WARNING_ID_PARENTHESES)
