@@ -2,7 +2,6 @@
 
 #include "em/macros/meta/codegen.h"
 #include "em/macros/meta/common.h"
-#include "em/macros/meta/loops.h"
 #include "em/macros/portable/tiny_func.h"
 #include "em/macros/portable/warnings.h"
 #include "em/macros/utils/forward.h"
@@ -16,8 +15,8 @@
 // The class is intentionally named, with the name prefixed with `Fn_`. This allows e.g. forward-declaring it for tag-invoke purposes.
 // You can overload the functor by stacking `EM_OVERLOAD deduced_targs_and_extras_, ...` at the end.
 //   Those repeat the last two arguments.
-// NOTE: When wrapping this macro, the `/*deduced_targs_and_extras_,*/ ...` must be passed as `EM_IMPLICIT_SEQ((__VA_ARGS__))` to propagate overloads correctly.
-#define EM_SIMPLE_FUNCTOR(name_, /*deduced_targs_and_extras_,*/ ...) EM_SIMPLE_FUNCTOR_EXT(name_, /*template_head*/, /*type_pattern*/, EM_IMPLICIT_SEQ((__VA_ARGS__)))
+// NOTE: When wrapping this macro, the `/*deduced_targs_and_extras_,*/ ...` must be passed as `__VA_ARGS__##__VA_OPT__()` to propagate overloads correctly.
+#define EM_SIMPLE_FUNCTOR(name_, /*deduced_targs_and_extras_,*/ ...) EM_SIMPLE_FUNCTOR_EXT(name_, /*template_head*/, /*type_pattern*/, __VA_ARGS__##__VA_OPT__())
 // This version allows adding template arguments that can be specified by the user. It also allows tweaking the functor variable type.
 // `name_` is the functor name.
 // `template_head_` is either empty, or `()` (which is same as empty), or a parenthesized `template <....>` template argument list.

@@ -4,10 +4,11 @@
 
 // Some tech based on loops.
 
-// Given `(a)(b)(c)`, returns `a)(b)(c`.
-// If given 1 or 0 elements, returns empty.
-// This can be used to forward macro arguments from one macro to another, by wrapping them in `EM_IMPLICIT_SEQ((...))`.
-// This can't handle removing more than one set of parentheses, e.g. `((a))((b))` -> `a))((b`.
+// You usually want to use `__VA_ARGS__##__VA_OPT__()` instead of this.
+// Given `(a)(b)(c)`, returns `a)(b)(c`. Given empty input, returns nothing.
+// This can be used to forward macro arguments from one macro to another, by wrapping them in `EM_IMPLICIT_SEQ((...))`, which returns `...`. Where `...` is e.g. `a)(b)(c`.
+// The `__VA_OPT__` trick mentioned above directly accepts `a)(b)(c` and returns it as is.
+// This can't handle removing more than one set of parentheses, e.g. `((a))((b))` -> `a))((b`, unlike `__VA_OPT__`.
 #define EM_IMPLICIT_SEQ(seq) EM_IDENTITY( DETAIL_EM_IMPLICIT_SEQ_LOOP_0 EM_LPAREN EM_IDENTITY( DETAIL_EM_IMPLICIT_SEQ_MAKE_GUIDE_A EM_END(DETAIL_EM_IMPLICIT_SEQ_ANNOTATE_A seq) ) )
 
 // `EM_END(DETAIL_EM_IMPLICIT_SEQ_ANNOTATE_A seq)` converts `seq` from e.g. `(a)(b)(c)` to `(1)(a)(1)(b)(1)(c)()`.
